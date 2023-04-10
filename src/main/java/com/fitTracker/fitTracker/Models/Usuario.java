@@ -34,6 +34,9 @@ public class Usuario {
     @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
     private Matricula matricula;
 
+    @OneToOne(mappedBy = "pessoa", cascade = CascadeType.ALL)
+    private Pessoa pessoa;
+
     @ManyToMany
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
@@ -105,7 +108,11 @@ public class Usuario {
         this.checkins = checkins;
     }
 
+    public Pessoa getPessoa() {
+        return pessoa;
+    }
 
-
-
+    public void setPessoa(Pessoa pessoa) {
+        this.pessoa = pessoa;
+    }
 }
