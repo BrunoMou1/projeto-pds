@@ -8,13 +8,12 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Table;
+
 import jakarta.validation.constraints.NotBlank;
 
 import java.util.Date;
 
-@Entity
-@Table(name = "pagamento")
+@Entity(name = "pagamento")
 public class Pagamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

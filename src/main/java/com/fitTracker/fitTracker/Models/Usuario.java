@@ -12,14 +12,12 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 
-import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
-@Table(name = "usuario")
+@Entity(name = "usuario")
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

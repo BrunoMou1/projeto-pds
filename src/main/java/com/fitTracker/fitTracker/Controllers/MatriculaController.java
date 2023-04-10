@@ -3,8 +3,6 @@ package com.fitTracker.fitTracker.Controllers;
 import com.fitTracker.fitTracker.Models.Matricula;
 import com.fitTracker.fitTracker.Models.Usuario;
 import com.fitTracker.fitTracker.Repositories.MatriculaRepository;
-import com.fitTracker.fitTracker.Repositories.PagamentoRepository;
-import com.fitTracker.fitTracker.Repositories.PlanoRepository;
 import com.fitTracker.fitTracker.Repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,13 +15,7 @@ public class MatriculaController {
     MatriculaRepository matriculaRepository;
 
     @Autowired
-    PlanoRepository planoRepository;
-
-    @Autowired
     UsuarioRepository usuarioRepository;
-
-    @Autowired
-    PagamentoRepository pagamentoRepository;
 
     @PostMapping("matricula")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
