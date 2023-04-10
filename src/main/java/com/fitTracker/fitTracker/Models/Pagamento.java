@@ -1,6 +1,14 @@
 package com.fitTracker.fitTracker.Models;
 
-import jakarta.persistence.*;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 
 import java.util.Date;
@@ -13,16 +21,16 @@ public class Pagamento {
     private Long id;
 
     @NotBlank
-    @Column(name="data_pagamento")
-    private Date data_pagamento;
+    @Column
+    private Date dataPagamento;
 
     @NotBlank
-    @Column(name="valor")
+    @Column
     private String valor;
 
     @NotBlank
-    @Column(name="forma_pagamento")
-    private String forma_pagamento;
+    @Column
+    private String formaPagamento;
 
     @ManyToOne
     @JoinColumn(name = "matricula_id")
@@ -31,10 +39,10 @@ public class Pagamento {
     public Pagamento() {
     }
 
-    public Pagamento(Date data_pagamento, String valor, String forma_pagamento, Matricula matricula) {
-        this.data_pagamento = data_pagamento;
+    public Pagamento(Date dataPagamento, String valor, String formaPagamento, Matricula matricula) {
+        this.dataPagamento = dataPagamento;
         this.valor = valor;
-        this.forma_pagamento = forma_pagamento;
+        this.formaPagamento = formaPagamento;
         this.matricula = matricula;
     }
 
@@ -46,12 +54,12 @@ public class Pagamento {
         this.id = id;
     }
 
-    public Date getData_pagamento() {
-        return data_pagamento;
+    public Date getDataPagamento() {
+        return dataPagamento;
     }
 
-    public void setData_pagamento(Date data_pagamento) {
-        this.data_pagamento = data_pagamento;
+    public void setDataPagamento(Date dataPagamento) {
+        this.dataPagamento = dataPagamento;
     }
 
     public String getValor() {
@@ -63,12 +71,12 @@ public class Pagamento {
         this.valor = valor;
     }
 
-    public String getForma_pagamento() {
-        return forma_pagamento;
+    public String getFormaPagamento() {
+        return formaPagamento;
     }
 
-    public void setForma_pagamento(String forma_pagamento) {
-        this.forma_pagamento = forma_pagamento;
+    public void setFormaPagamento(String formaPagamento) {
+        this.formaPagamento = formaPagamento;
     }
 
     public Matricula getMatricula() {

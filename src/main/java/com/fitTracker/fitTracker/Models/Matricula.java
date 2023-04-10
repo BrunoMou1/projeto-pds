@@ -1,6 +1,16 @@
 package com.fitTracker.fitTracker.Models;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Column;
+import jakarta.persistence.Table;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
 import jakarta.validation.constraints.NotBlank;
 
 import java.util.ArrayList;
@@ -14,15 +24,15 @@ public class Matricula {
     private Long id;
 
     @NotBlank
-    @Column(name = "data_vencimento")
-    private String data_vencimento;
+    @Column
+    private String dataVencimento;
 
     @NotBlank
-    @Column(name = "valor")
+    @Column
     private String valor;
 
     @NotBlank
-    @Column(name = "status", columnDefinition = "varchar(255) default 'inativo'")
+    @Column(columnDefinition = "varchar(255) default 'inativo'")
     private String status;
 
     @OneToOne
@@ -38,8 +48,8 @@ public class Matricula {
     public Matricula() {
     }
 
-    public Matricula(String data_vencimento, String valor, String status, Usuario usuario, List<Pagamento> pagamentos, Plano plano) {
-        this.data_vencimento = data_vencimento;
+    public Matricula(String dataVencimento, String valor, String status, Usuario usuario, List<Pagamento> pagamentos, Plano plano) {
+        this.dataVencimento = dataVencimento;
         this.valor = valor;
         this.status = status;
         this.usuario = usuario;
@@ -55,12 +65,12 @@ public class Matricula {
         this.id = id;
     }
 
-    public String getData_vencimento() {
-        return data_vencimento;
+    public String getDataVencimento() {
+        return dataVencimento;
     }
 
-    public void setData_vencimento(String data_vencimento) {
-        this.data_vencimento = data_vencimento;
+    public void setDataVencimento(String dataVencimento) {
+        this.dataVencimento = dataVencimento;
     }
 
     public String getValor() {

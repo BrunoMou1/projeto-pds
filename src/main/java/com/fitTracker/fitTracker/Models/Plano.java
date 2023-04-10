@@ -1,6 +1,13 @@
 package com.fitTracker.fitTracker.Models;
 
-import jakarta.persistence.*;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Column;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotBlank;
 
 import java.util.ArrayList;
@@ -14,11 +21,11 @@ public class Plano {
     private Long id;
 
     @NotBlank
-    @Column(name = "nome")
+    @Column
     private String nome;
 
     @NotBlank
-    @Column(name = "valor")
+    @Column
     private String valor;
 
     @OneToMany

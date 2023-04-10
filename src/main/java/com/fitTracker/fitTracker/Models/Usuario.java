@@ -1,6 +1,18 @@
 package com.fitTracker.fitTracker.Models;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Column;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 
 import java.util.HashSet;
@@ -14,11 +26,11 @@ public class Usuario {
     private Long id;
 
     @NotBlank
-    @Column(name="username", unique = true)
+    @Column(unique = true)
     private String username;
 
     @NotBlank
-    @Column(name = "password")
+    @Column
     private String password;
 
     @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)

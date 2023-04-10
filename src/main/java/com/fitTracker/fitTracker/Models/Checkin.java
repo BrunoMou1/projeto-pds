@@ -1,6 +1,13 @@
 package com.fitTracker.fitTracker.Models;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 
 import java.sql.Time;
@@ -14,11 +21,11 @@ public class Checkin {
     private Long id;
 
     @NotBlank
-    @Column(name = "data")
+    @Column
     private Date data;
 
     @NotBlank
-    @Column(name = "hora")
+    @Column
     private Time hora;
 
     @ManyToOne
