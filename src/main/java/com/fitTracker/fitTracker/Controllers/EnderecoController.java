@@ -2,6 +2,7 @@ package com.fitTracker.fitTracker.Controllers;
 
 import com.fitTracker.fitTracker.Models.Endereco;
 import com.fitTracker.fitTracker.Models.EnderecoPessoa;
+import com.fitTracker.fitTracker.Models.Pessoa;
 import com.fitTracker.fitTracker.Service.impl.EnderecoPessoaServiceImpl;
 import com.fitTracker.fitTracker.Service.impl.EnderecoServiceImpl;
 import com.fitTracker.fitTracker.Service.impl.PessoaServiceImpl;
@@ -27,20 +28,15 @@ public class EnderecoController {
 
     @PostMapping(value="/{id}", produces = "application/json;charset=UTF-8")
     @ResponseStatus(HttpStatus.CREATED)
-    public void createEnderecoPessoa(@PathVariable("id") Long id, @RequestBody Endereco endereco) {
-        pessoaService.findById(id)
-                .map(pessoa -> {
+    public EnderecoPessoa createEnderecoPessoa(@PathVariable("id") Long id, @RequestBody Endereco endereco) {
+        Pessoa pessoa = pessoaService.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Essa Pessoa não foi encontrada."));
 
-                    if(endereco.getId() == null) {
-                        enderecoService.save(endereco);
-                    }
+        if(endereco.getId() == null) {
+            enderecoService.save(endereco);
+        }
+        EnderecoPessoa enderecoPessoa = new EnderecoPessoa(pessoa, endereco);
 
-                    EnderecoPessoa enderecoPessoa = new EnderecoPessoa(pessoa, endereco);
-
-                    enderecoPessoaService.save(enderecoPessoa);
-
-                    return Void.TYPE;
-                }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Essa Pessoa não foi encontrada."));
+        return enderecoPessoaService.save(enderecoPessoa);
     }
 
     @GetMapping(value="/{id}", produces = "application/json;charset=UTF-8")
