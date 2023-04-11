@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 
 import java.util.Date;
 
@@ -27,6 +28,9 @@ public class Pessoa {
 
     @Column
     private String telefone;
+
+    @OneToOne
+    public Usuario usuario;
 
     public Pessoa () {
 
@@ -70,5 +74,13 @@ public class Pessoa {
 
     public void setTelefone(String telefone) {
         this.telefone = telefone;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 }
