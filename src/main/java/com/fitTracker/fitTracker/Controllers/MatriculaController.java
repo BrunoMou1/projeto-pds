@@ -1,8 +1,8 @@
 package com.fitTracker.fitTracker.Controllers;
 
 import com.fitTracker.fitTracker.Models.Matricula;
-import com.fitTracker.fitTracker.Repositories.UsuarioRepository;
 import com.fitTracker.fitTracker.Service.MatriculaService;
+import com.fitTracker.fitTracker.Util.ElementoNaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -16,39 +16,40 @@ public class MatriculaController {
     @Autowired
     MatriculaService matriculaService;
 
-    @Autowired
-    UsuarioRepository usuarioService;
-
     @PostMapping(produces = "application/json;charset=UTF-8")
     @ResponseStatus(HttpStatus.CREATED)
     public Matricula createMatricula(@RequestBody Matricula matricula) {
-        usuarioService.findById(matricula.getUsuario().getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario não encontrado."));
-        return matriculaService.save(matricula);
+
+        try {
+            return matriculaService.save(matricula);
+        } catch (ElementoNaoEncontradoException ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
+        }
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Matricula findByIdUsuario(@PathVariable Long id) {
-        usuarioService.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario não encontrado."));
-
-        return matriculaService.findByIdUsuario(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Este usuario não possui matricula."));
-
+        try {
+            return matriculaService.findByIdUsuario(id).get();
+        } catch (ElementoNaoEncontradoException ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteMatricula(@PathVariable Long id) {
-        matriculaService.findById(id)
-                .map(matricula -> {
-                    matriculaService.deleteById(id);
-                    return Void.TYPE;
-                }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Esta matricula não existe"));
+        try {
+            matriculaService.deleteById(id);
+        } catch (ElementoNaoEncontradoException ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
+        }
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<Matricula> listAll() {
-
         return matriculaService.listAll();
     }
 }
