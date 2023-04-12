@@ -6,6 +6,8 @@ import com.fitTracker.fitTracker.Models.Pessoa;
 import com.fitTracker.fitTracker.Service.EnderecoPessoaService;
 import com.fitTracker.fitTracker.Service.EnderecoService;
 import com.fitTracker.fitTracker.Service.PessoaService;
+import com.fitTracker.fitTracker.Util.ElementoExisteException;
+import com.fitTracker.fitTracker.Util.ElementoNaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -29,32 +31,36 @@ public class EnderecoController {
     @PostMapping(value="/{id}", produces = "application/json;charset=UTF-8")
     @ResponseStatus(HttpStatus.CREATED)
     public EnderecoPessoa createEnderecoPessoa(@PathVariable("id") Long id, @RequestBody Endereco endereco) {
-        Pessoa pessoa = pessoaService.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Essa Pessoa não foi encontrada."));
 
-        if(endereco.getId() == null) {
-            enderecoService.save(endereco);
+        try {
+            Pessoa pessoa = pessoaService.findById(id).get();
+            EnderecoPessoa enderecoPessoa = new EnderecoPessoa(pessoa, endereco);
+
+            return enderecoPessoaService.save(enderecoPessoa);
+
+        } catch (ElementoNaoEncontradoException ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
         }
-        EnderecoPessoa enderecoPessoa = new EnderecoPessoa(pessoa, endereco);
-
-        return enderecoPessoaService.save(enderecoPessoa);
     }
 
     @GetMapping(value="/{id}", produces = "application/json;charset=UTF-8")
     @ResponseStatus(HttpStatus.OK)
     public List<EnderecoPessoa> listByIdPessoa(@PathVariable("id") Long id){
-        return enderecoPessoaService.listByIdPessoa(id);
+        try {
+            return enderecoPessoaService.listByIdPessoa(id);
+        } catch (ElementoNaoEncontradoException ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
+        }
     }
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.OK)
     public void deleteEnderecoPessoa(@RequestBody EnderecoPessoa enderecoPessoa) {
-        enderecoPessoaService.findById(enderecoPessoa.getId())
-                .map(enderecoPessoaBanco -> {
-
-                    enderecoPessoaService.deleteById(enderecoPessoa.getId());
-
-                    return Void.TYPE;
-                }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Esse Endereco não existe com essa pessoa."));
+        try {
+            enderecoPessoaService.deleteById(enderecoPessoa.getId());
+        } catch (ElementoNaoEncontradoException ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
+        }
     }
 
     @GetMapping(produces = "application/json;charset=UTF-8")
