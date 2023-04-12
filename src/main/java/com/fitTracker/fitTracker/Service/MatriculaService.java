@@ -15,5 +15,5 @@ public interface MatriculaService {
 
     public List<Matricula> listAll();
 
-    public Optional<Matricula> findByIdUsuario(Long id);
+    public List<Matricula> listByUsuarioId(Long id);
 }

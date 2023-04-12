@@ -58,13 +58,13 @@ public class MatriculaServiceImpl implements MatriculaService {
     }
 
     @Override
-    public Optional<Matricula> findByIdUsuario(Long id){
+    public List<Matricula> listByUsuarioId(Long id){
 
         if(usuarioRepository.findById(id).isEmpty()){
             throw new ElementoNaoEncontradoException("Não foi encontrado um usuario com esse id!");
         }
 
-        Optional<Matricula> matricula = matriculaRepository.findByUsuarioId(id);
+        List<Matricula> matricula = matriculaRepository.findByUsuarioId(id);
 
         if(matricula.isEmpty()){
             throw new ElementoNaoEncontradoException("Não foi encontrada nenhuma matricula desse usuario!");

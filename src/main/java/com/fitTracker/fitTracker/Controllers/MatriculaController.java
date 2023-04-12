@@ -29,9 +29,9 @@ public class MatriculaController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Matricula findByIdUsuario(@PathVariable Long id) {
+    public List<Matricula> listByIdUsuario(@PathVariable Long id) {
         try {
-            return matriculaService.findByIdUsuario(id).get();
+            return matriculaService.listByUsuarioId(id);
         } catch (ElementoNaoEncontradoException ex) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
         }
