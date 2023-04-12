@@ -1,7 +1,9 @@
 package com.fitTracker.fitTracker.Controllers;
 
 import com.fitTracker.fitTracker.Models.Pessoa;
-import com.fitTracker.fitTracker.Service.impl.PessoaServiceImpl;
+import com.fitTracker.fitTracker.Service.PessoaService;
+import com.fitTracker.fitTracker.Util.ElementoExisteException;
+import com.fitTracker.fitTracker.Util.ElementoNaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,28 +21,35 @@ import org.springframework.web.server.ResponseStatusException;
 @RequestMapping("/people")
 public class PessoaController {
     @Autowired
-    private PessoaServiceImpl pessoaService;
+    private PessoaService pessoaService;
 
     @PostMapping(produces = "application/json;charset=UTF-8")
     @ResponseStatus(HttpStatus.CREATED)
     public Pessoa create(@RequestBody Pessoa pessoa) {
-        return pessoaService.save(pessoa);
+        try {
+            return pessoaService.save(pessoa);
+        } catch(ElementoExisteException ex) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, ex.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteById(@PathVariable("id") Long id) {
-        pessoaService.findById(id)
-                .map(pessoa -> {
-                    pessoaService.deleteById(id);
-                    return Void.TYPE;
-                }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Essa Pessoa não foi encontrada."));
+        try {
+            pessoaService.deleteById(id);
+        } catch(ElementoNaoEncontradoException ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
+        }
     }
 
     @GetMapping(value="/{cpf}", produces = "application/json;charset=UTF-8")
     @ResponseStatus(HttpStatus.OK)
     public Pessoa findByCpf(@PathVariable("cpf") String cpf){
-        return pessoaService.findByCpf(cpf)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Essa Pessoa não foi encontrada."));
+        try {
+            return pessoaService.findByCpf(cpf).get();
+        } catch(ElementoNaoEncontradoException ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
+        }
     }
 }

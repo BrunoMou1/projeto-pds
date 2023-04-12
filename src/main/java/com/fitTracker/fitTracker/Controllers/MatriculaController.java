@@ -1,6 +1,5 @@
 package com.fitTracker.fitTracker.Controllers;
 
-import aj.org.objectweb.asm.Type;
 import com.fitTracker.fitTracker.Models.Matricula;
 import com.fitTracker.fitTracker.Repositories.UsuarioRepository;
 import com.fitTracker.fitTracker.Service.MatriculaService;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/registration")

@@ -1,6 +1,7 @@
 package com.fitTracker.fitTracker.Controllers;
 
 import com.fitTracker.fitTracker.Models.Plano;
+import com.fitTracker.fitTracker.Service.PlanoService;
 import com.fitTracker.fitTracker.Service.impl.PlanoServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,7 +14,7 @@ import java.util.List;
 public class PlanoController {
 
     @Autowired
-    private PlanoServiceImpl planoService;
+    private PlanoService planoService;
 
     @PostMapping(produces = "application/json;charset=UTF-8")
     @ResponseStatus(HttpStatus.CREATED)

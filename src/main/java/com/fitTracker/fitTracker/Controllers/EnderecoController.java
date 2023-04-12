@@ -3,9 +3,9 @@ package com.fitTracker.fitTracker.Controllers;
 import com.fitTracker.fitTracker.Models.Endereco;
 import com.fitTracker.fitTracker.Models.EnderecoPessoa;
 import com.fitTracker.fitTracker.Models.Pessoa;
-import com.fitTracker.fitTracker.Service.impl.EnderecoPessoaServiceImpl;
-import com.fitTracker.fitTracker.Service.impl.EnderecoServiceImpl;
-import com.fitTracker.fitTracker.Service.impl.PessoaServiceImpl;
+import com.fitTracker.fitTracker.Service.EnderecoPessoaService;
+import com.fitTracker.fitTracker.Service.EnderecoService;
+import com.fitTracker.fitTracker.Service.PessoaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -18,13 +18,13 @@ import java.util.List;
 public class EnderecoController {
 
     @Autowired
-    private EnderecoPessoaServiceImpl enderecoPessoaService;
+    private EnderecoPessoaService enderecoPessoaService;
 
     @Autowired
-    private EnderecoServiceImpl enderecoService;
+    private EnderecoService enderecoService;
 
     @Autowired
-    private PessoaServiceImpl pessoaService;
+    private PessoaService pessoaService;
 
     @PostMapping(value="/{id}", produces = "application/json;charset=UTF-8")
     @ResponseStatus(HttpStatus.CREATED)
@@ -41,8 +41,8 @@ public class EnderecoController {
 
     @GetMapping(value="/{id}", produces = "application/json;charset=UTF-8")
     @ResponseStatus(HttpStatus.OK)
-    public List<EnderecoPessoa> listEnderecoByIdPessoa(@PathVariable("id") Long id){
-        return enderecoPessoaService.listEnderecosByIdPessoa(id);
+    public List<EnderecoPessoa> listByIdPessoa(@PathVariable("id") Long id){
+        return enderecoPessoaService.listByIdPessoa(id);
     }
 
     @DeleteMapping
