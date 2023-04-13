@@ -59,4 +59,9 @@ public class PessoaServiceImpl implements PessoaService {
         }
         return pessoa;
     }
+
+    @Override
+    public Pessoa update(Long id, Pessoa pessoa) {
+        return null;
+    }
 }

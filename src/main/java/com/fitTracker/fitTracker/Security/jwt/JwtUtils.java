@@ -35,15 +35,19 @@ public class JwtUtils {
         }
     }
 
+    public String test() {
+        System.out.println("check 2");
+        return "test";
+    }
+
     public ResponseCookie generateJwtCookie(UserDetailsImpl userPrincipal) {
         String jwt = generateTokenFromUsername(userPrincipal.getUsername());
         ResponseCookie cookie = ResponseCookie.from(jwtCookie, jwt).path("/fitTracker").maxAge(24 * 60 * 60).httpOnly(true)
                 .build();
         return cookie;
     }
-
     public ResponseCookie getCleanJwtCookie() {
-        ResponseCookie cookie = ResponseCookie.from(jwtCookie, null).path("/fitTracker").build();
+        ResponseCookie cookie = ResponseCookie.from(jwtCookie, null).path("/fittracker").build();
         return cookie;
     }
 

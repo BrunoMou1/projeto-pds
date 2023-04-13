@@ -6,9 +6,9 @@ import com.fitTracker.fitTracker.Models.Usuario;
 import com.fitTracker.fitTracker.Repositories.RoleRepository;
 import com.fitTracker.fitTracker.Repositories.UsuarioRepository;
 import com.fitTracker.fitTracker.Request.Login;
-import com.fitTracker.fitTracker.Request.Signup;
 import com.fitTracker.fitTracker.Security.AuthServices.UserDetailsImpl;
 import com.fitTracker.fitTracker.Security.jwt.JwtUtils;
+
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -20,14 +20,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @RestController
+@RequestMapping("/fittracker/")
 public class AuthController {
     @Autowired
     AuthenticationManager authenticationManager;
@@ -44,12 +43,12 @@ public class AuthController {
     @Autowired
     JwtUtils jwtUtils;
 
-    @PostMapping("fittracker/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody Login Login) {
-
+    @PostMapping("signin")
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody Login login) {
+        System.out.println("check 1");
         Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(Login.getUsername(),
-                        Login.getPassword()));
+                .authenticate(new UsernamePasswordAuthenticationToken(login.getUsername(),
+                        login.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -62,19 +61,26 @@ public class AuthController {
                 .body(userDetails);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("fittracker/cadastrar")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody Signup signUp) {
-        if (usuarioRepository.existsByUsername(signUp.getUsername())) {
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+    @GetMapping("teste")
+    public String teste() {
+        return "teste";
+    }
+
+    @PostMapping("cadastrar")
+    public ResponseEntity<?> registerUser(@Valid @RequestBody Usuario usuario) {
+        if (usuarioRepository.existsByUsername(usuario.getUsername())) {
             return ResponseEntity
                     .badRequest()
-                    .body("Error: Username is already taken!");
+                    .body("Error: Username ja existe!");
         }
 
-        Usuario usuario = new Usuario(signUp.getUsername(),
-                encoder.encode(signUp.getPassword()));
+        usuario.setPassword(encoder.encode(usuario.getPassword()));
 
-        Set<String> strRoles = signUp.getRole();
+        Set<String> strRoles = new HashSet<>();
+        usuario.getRoles().forEach(role -> {
+            strRoles.add(role.getName().name());
+        });
         Set<Role> roles = new HashSet<>();
 
         if (strRoles == null) {
@@ -104,7 +110,7 @@ public class AuthController {
         return ResponseEntity.ok(usuario);
     }
 
-    @PostMapping("/signout")
+    @PostMapping("signout")
     public ResponseEntity<?> logoutUser() {
         ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
         return ResponseEntity.ok()
