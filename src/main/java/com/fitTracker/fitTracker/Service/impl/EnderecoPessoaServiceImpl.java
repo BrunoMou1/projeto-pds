@@ -1,8 +1,10 @@
 package com.fitTracker.fitTracker.Service.impl;
 
+import com.fitTracker.fitTracker.Models.Endereco;
 import com.fitTracker.fitTracker.Models.EnderecoPessoa;
 import com.fitTracker.fitTracker.Models.EnderecoPessoaKey;
 import com.fitTracker.fitTracker.Repositories.EnderecoPessoaRepository;
+import com.fitTracker.fitTracker.Service.EnderecoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
