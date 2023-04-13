@@ -14,5 +14,5 @@ public interface PessoaService {
 
     public Optional<Pessoa> findById(Long id);
 
-    Pessoa update(Long id, Pessoa pessoa);
+    public void updateTelefone(Pessoa pessoa);
 }

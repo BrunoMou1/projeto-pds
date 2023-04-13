@@ -1,6 +1,7 @@
 package com.fitTracker.fitTracker.Controllers;
 
 import com.fitTracker.fitTracker.Models.Pessoa;
+import com.fitTracker.fitTracker.Models.Plano;
 import com.fitTracker.fitTracker.Service.PessoaService;
 import com.fitTracker.fitTracker.Util.ElementoExisteException;
 import com.fitTracker.fitTracker.Util.ElementoNaoEncontradoException;
@@ -38,9 +39,11 @@ public class PessoaController {
 
     @PutMapping(value="/{id}", produces = "application/json;charset=UTF-8")
     @ResponseStatus(HttpStatus.OK)
-    public Pessoa update(@PathVariable("id") Long id, @RequestBody Pessoa pessoa) {
+    public void update(@PathVariable("id") Long id, @RequestBody Pessoa pessoa) {
+        pessoa.setId(id);
+
         try {
-            return pessoaService.update(id, pessoa);
+            pessoaService.updateTelefone(pessoa);
         } catch(ElementoNaoEncontradoException ex) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
         }

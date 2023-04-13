@@ -61,7 +61,12 @@ public class PessoaServiceImpl implements PessoaService {
     }
 
     @Override
-    public Pessoa update(Long id, Pessoa pessoa) {
-        return null;
+    public void updateTelefone(Pessoa pessoa) {
+        if(pessoaRepository.findById(pessoa.getId()).isEmpty()){
+            throw new ElementoNaoEncontradoException("Não foi encontrada nenhuma Pessoa com esse id!");
+        }
+
+        pessoaRepository.updateTelefone(pessoa.getTelefone(), pessoa.getId());
     }
+
 }
