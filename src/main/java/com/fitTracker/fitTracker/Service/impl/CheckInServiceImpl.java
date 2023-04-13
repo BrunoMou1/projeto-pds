@@ -17,5 +17,5 @@ public class CheckInServiceImpl implements CheckinService {
 
     public Checkin save(Checkin checkin) { return checkinRepository.save(checkin);}
 
-    public List<Checkin> findCheckinsByPessoa(Usuario usuario) { return checkinRepository.findByUsuarioId(usuario.getId());}
+    //public List<Checkin> findCheckinsByPessoa(Usuario usuario) { return checkinRepository.findByUsuarioId(usuario.getId());}
 }

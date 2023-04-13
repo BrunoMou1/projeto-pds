@@ -103,4 +103,8 @@ public class Usuario {
     public void setPessoa(Pessoa pessoa) {
         this.pessoa = pessoa;
     }
+
+    public void addCheckins(Checkin checkin) {
+        this.checkins.add(checkin);
+    }
 }
