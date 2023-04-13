@@ -38,9 +38,6 @@ public class Usuario {
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    @OneToMany
-    private Set<Checkin> checkins = new HashSet<>();
-
     public Usuario() {
     }
 
@@ -53,7 +50,6 @@ public class Usuario {
         this.username = username;
         this.password = password;
         this.roles = roles;
-        this.checkins = checkins;
     }
 
     public Long getId() {
@@ -88,14 +84,6 @@ public class Usuario {
         this.roles = roles;
     }
 
-    public Set<Checkin> getCheckins() {
-        return checkins;
-    }
-
-    public void setCheckins(Set<Checkin> checkins) {
-        this.checkins = checkins;
-    }
-
     public Pessoa getPessoa() {
         return pessoa;
     }
@@ -104,7 +92,4 @@ public class Usuario {
         this.pessoa = pessoa;
     }
 
-    public void addCheckins(Checkin checkin) {
-        this.checkins.add(checkin);
-    }
 }
