@@ -27,17 +27,12 @@ public class Checkin {
     @Column
     private Time hora;
 
-    @ManyToOne
-    @JoinColumn(name = "usuario_id")
-    private Usuario usuario;
-
     public Checkin() {
     }
 
-    public Checkin(Date data, Time hora, Usuario usuario) {
+    public Checkin(Date data, Time hora) {
         this.data = data;
         this.hora = hora;
-        this.usuario = usuario;
     }
 
     public Long getId() {
@@ -62,14 +57,6 @@ public class Checkin {
 
     public void setHora(Time hora) {
         this.hora = hora;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
     }
 
 }

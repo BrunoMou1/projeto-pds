@@ -13,4 +13,6 @@ public interface PessoaService {
     public void deleteById(Long id);
 
     public Optional<Pessoa> findById(Long id);
+
+    public void updateTelefone(Pessoa pessoa);
 }

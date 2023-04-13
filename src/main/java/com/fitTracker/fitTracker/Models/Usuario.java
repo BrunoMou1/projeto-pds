@@ -31,17 +31,14 @@ public class Usuario {
     @Column
     private String password;
 
-    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
-    private Matricula matricula;
-
-    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
+    @OneToOne
     private Pessoa pessoa;
 
     @ManyToMany
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    @OneToMany
     private Set<Checkin> checkins = new HashSet<>();
 
     public Usuario() {
@@ -52,10 +49,9 @@ public class Usuario {
         this.password = password;
     }
 
-    public Usuario(String username, String password, Matricula matricula, Set<Role> roles, Set<Checkin> checkins) {
+    public Usuario(String username, String password, Set<Role> roles, Set<Checkin> checkins) {
         this.username = username;
         this.password = password;
-        this.matricula = matricula;
         this.roles = roles;
         this.checkins = checkins;
     }
@@ -82,14 +78,6 @@ public class Usuario {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public Matricula getMatricula() {
-        return matricula;
-    }
-
-    public void setMatricula(Matricula matricula) {
-        this.matricula = matricula;
     }
 
     public Set<Role> getRoles() {

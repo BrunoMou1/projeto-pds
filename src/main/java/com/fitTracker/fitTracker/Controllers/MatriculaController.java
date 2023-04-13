@@ -1,47 +1,65 @@
 package com.fitTracker.fitTracker.Controllers;
 
 import com.fitTracker.fitTracker.Models.Matricula;
-import com.fitTracker.fitTracker.Models.Usuario;
-import com.fitTracker.fitTracker.Repositories.MatriculaRepository;
-import com.fitTracker.fitTracker.Repositories.UsuarioRepository;
+import com.fitTracker.fitTracker.Service.MatriculaService;
+import com.fitTracker.fitTracker.Util.ElementoNaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/fittracker/")
+@RequestMapping("/registration")
 public class MatriculaController {
     @Autowired
-    MatriculaRepository matriculaRepository;
+    MatriculaService matriculaService;
 
-    @Autowired
-    UsuarioRepository usuarioRepository;
-
-    @PostMapping("matricula")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping(produces = "application/json;charset=UTF-8")
+    @ResponseStatus(HttpStatus.CREATED)
     public Matricula createMatricula(@RequestBody Matricula matricula) {
-        return matriculaRepository.save(matricula);
+
+        try {
+            return matriculaService.save(matricula);
+        } catch (ElementoNaoEncontradoException ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
+        }
     }
 
-    @GetMapping("matricula/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public Matricula getMatriculaByUsuarioId(@PathVariable Long id) {
-        Usuario usuario = usuarioRepository.findById(id).get();
-        return usuario.getMatricula();
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Matricula> listByIdUsuario(@PathVariable Long id) {
+        try {
+            return matriculaService.listByUsuarioId(id);
+        } catch (ElementoNaoEncontradoException ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
+        }
     }
 
-    @PutMapping("matricula/{id}/plano")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public Matricula updateMatricula(@PathVariable Long id, @RequestBody Matricula matricula) {
-        Matricula matriculaAtual = matriculaRepository.findById(id).get();
-        matriculaAtual.setPlano(matricula.getPlano());
-        return matriculaRepository.save(matriculaAtual);
-    }
-
-    @DeleteMapping("matricula/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public void deleteMatricula(@PathVariable Long id) {
-        Usuario usuario = usuarioRepository.findById(id).get();
-        matriculaRepository.deleteById(usuario.getMatricula().getId());
+        try {
+            matriculaService.deleteById(id);
+        } catch (ElementoNaoEncontradoException ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
+        }
+    }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<Matricula> listAll() {
+        return matriculaService.listAll();
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void enableOrDisableStatusById(@PathVariable Long id) {
+        try {
+            matriculaService.enableOrDisableStatusById(id);
+        } catch (ElementoNaoEncontradoException ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
+        }
     }
 }
