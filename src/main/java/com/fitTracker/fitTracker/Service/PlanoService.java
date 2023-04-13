@@ -14,4 +14,6 @@ public interface PlanoService {
     public List<Plano> findAll();
 
     public Optional<Plano> findById(Long id);
+
+    public void update(Plano plano);
 }
