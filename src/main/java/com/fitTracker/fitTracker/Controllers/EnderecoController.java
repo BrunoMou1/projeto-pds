@@ -4,9 +4,7 @@ import com.fitTracker.fitTracker.Models.Endereco;
 import com.fitTracker.fitTracker.Models.EnderecoPessoa;
 import com.fitTracker.fitTracker.Models.Pessoa;
 import com.fitTracker.fitTracker.Service.EnderecoPessoaService;
-import com.fitTracker.fitTracker.Service.EnderecoService;
 import com.fitTracker.fitTracker.Service.PessoaService;
-import com.fitTracker.fitTracker.Util.ElementoExisteException;
 import com.fitTracker.fitTracker.Util.ElementoNaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,8 +20,6 @@ public class EnderecoController {
     @Autowired
     private EnderecoPessoaService enderecoPessoaService;
 
-    @Autowired
-    private EnderecoService enderecoService;
 
     @Autowired
     private PessoaService pessoaService;
