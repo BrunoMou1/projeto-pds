@@ -3,6 +3,8 @@ package com.fitTracker.fitTracker.Service.impl;
 import com.fitTracker.fitTracker.Models.EnderecoPessoa;
 import com.fitTracker.fitTracker.Models.EnderecoPessoaKey;
 import com.fitTracker.fitTracker.Repositories.EnderecoPessoaRepository;
+import com.fitTracker.fitTracker.Repositories.EnderecoRepository;
+import com.fitTracker.fitTracker.Repositories.PessoaRepository;
 import com.fitTracker.fitTracker.Service.EnderecoPessoaService;
 import com.fitTracker.fitTracker.Service.EnderecoService;
 import com.fitTracker.fitTracker.Service.PessoaService;
@@ -20,22 +22,22 @@ public class EnderecoPessoaServiceImpl implements EnderecoPessoaService {
     private EnderecoPessoaRepository enderecoPessoaRepository;
 
     @Autowired
-    private EnderecoService enderecoService;
+    private EnderecoRepository enderecoRepository;
 
     @Autowired
-    private PessoaService pessoaService;
+    private PessoaRepository peossoaRepository;
 
 
     @Override
     public EnderecoPessoa save(EnderecoPessoa enderecoPessoa) {
 
         if(enderecoPessoa.getEndereco().getId() == null) {
-            enderecoPessoa.setEndereco(enderecoService.save(enderecoPessoa.getEndereco()));
+            enderecoPessoa.setEndereco(enderecoRepository.save(enderecoPessoa.getEndereco()));
         }else {
-            enderecoPessoa.setEndereco(enderecoService.findById(enderecoPessoa.getEndereco().getId()).get());
+            enderecoPessoa.setEndereco(enderecoRepository.findById(enderecoPessoa.getEndereco().getId()).get());
         }
 
-        enderecoPessoa.setPessoa(pessoaService.findById(enderecoPessoa.getPessoa().getId()).get());
+        enderecoPessoa.setPessoa(peossoaRepository.findById(enderecoPessoa.getPessoa().getId()).get());
 
         return enderecoPessoaRepository.save(enderecoPessoa);
     }
@@ -72,7 +74,9 @@ public class EnderecoPessoaServiceImpl implements EnderecoPessoaService {
     @Override
     public List<EnderecoPessoa> listByIdPessoa(Long id) {
 
-        pessoaService.findById(id);
+        if(peossoaRepository.findById(id).isEmpty()){
+            throw new ElementoNaoEncontradoException("Não foi encontrado nenhuma pessoa com esse id!");
+        }
 
         return enderecoPessoaRepository.findByPessoaId(id);
     }
