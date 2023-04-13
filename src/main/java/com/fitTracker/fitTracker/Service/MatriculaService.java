@@ -16,4 +16,6 @@ public interface MatriculaService {
     public List<Matricula> listAll();
 
     public List<Matricula> listByUsuarioId(Long id);
+
+    public void enableOrDisableStatusById(Long id);
 }

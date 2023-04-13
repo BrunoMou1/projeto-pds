@@ -52,4 +52,14 @@ public class MatriculaController {
     public List<Matricula> listAll() {
         return matriculaService.listAll();
     }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void enableOrDisableStatusById(@PathVariable Long id) {
+        try {
+            matriculaService.enableOrDisableStatusById(id);
+        } catch (ElementoNaoEncontradoException ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
+        }
+    }
 }

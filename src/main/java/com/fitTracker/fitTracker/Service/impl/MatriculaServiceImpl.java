@@ -73,5 +73,19 @@ public class MatriculaServiceImpl implements MatriculaService {
         return matricula;
     }
 
+    @Override
+    public void enableOrDisableStatusById(Long id) {
+        Optional<Matricula> matricula = matriculaRepository.findById(id);
+
+        if(matricula.isEmpty()){
+            throw new ElementoNaoEncontradoException("Não foi encontrada nenhuma matricula com esse id!");
+        }
+        if(matricula.get().getStatus().equals("desativo")) {
+            matriculaRepository.updateStatus("ativo", id);
+        }else {
+            matriculaRepository.updateStatus("desativo", id);
+        }
+    }
+
 
 }
