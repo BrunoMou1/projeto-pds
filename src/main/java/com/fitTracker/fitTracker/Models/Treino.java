@@ -11,6 +11,10 @@ public class Treino {
 
     @NotBlank
     @Column
+    private String status;
+
+    @NotBlank
+    @Column
     private String nome;
 
     @Column
@@ -71,5 +75,13 @@ public class Treino {
 
     public void setNivel(Nivel nivel) {
         this.nivel = nivel;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

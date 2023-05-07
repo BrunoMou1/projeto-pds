@@ -7,11 +7,19 @@ import java.util.List;
 
 public interface TreinoService {
 
-    public Nivel createNivel(Nivel nivel);
+    Nivel createNivel(Nivel nivel);
 
-    public Treino createTreino(Treino treino);
+    Treino createTreino(Treino treino);
 
-    public List<Treino> findTreinoByNivelId(Long nivelId);
+    List<Treino> findTreinoByNivelId(Long nivelId);
 
-    public List<Nivel> findAllNivel();
+    List<Nivel> findAllNivel();
+
+    void deleteTreino(Long treinoId);
+
+    Treino updateTreino(Treino treino);
+
+    Nivel updateNivel(Nivel nivel);
+
+    void deleteNivel(Long nivelId);
 }
