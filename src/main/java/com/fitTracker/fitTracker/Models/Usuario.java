@@ -13,8 +13,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 
 import jakarta.validation.constraints.NotBlank;
+import org.hibernate.mapping.Join;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity(name = "usuario")
@@ -33,6 +36,10 @@ public class Usuario {
 
     @OneToOne
     private Pessoa pessoa;
+
+    @ManyToMany
+    @JoinTable(name = "usuario_treino", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name="treino_id"))
+    private List<Treino> treinos = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -92,4 +99,11 @@ public class Usuario {
         this.pessoa = pessoa;
     }
 
+    public List<Treino> getTreinos() {
+        return treinos;
+    }
+
+    public void setTreinos(List<Treino> treinos) {
+        this.treinos = treinos;
+    }
 }

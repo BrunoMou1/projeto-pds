@@ -1,6 +1,7 @@
 package com.fitTracker.fitTracker.Service;
 
 import com.fitTracker.fitTracker.Models.Plano;
+import com.fitTracker.fitTracker.Models.Treino;
 import com.fitTracker.fitTracker.Models.Usuario;
 
 import java.util.List;
@@ -17,5 +18,9 @@ public interface UsuarioService {
     public void deleteById(Long id);
 
     public List<Usuario> findAll();
+
+    public List<Treino> addTreinoUsuario(Long usuarioId, Long treinoId);
+
+    public List<Treino> removeTreinoUsuario(Long usuarioId, Long treinoId);
 
 }
