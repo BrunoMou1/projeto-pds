@@ -45,6 +45,8 @@ public class Usuario {
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
+    @OneToMany
+    private List<Recompensa> historicoRecompensas = new ArrayList<>();
     public Usuario() {
     }
 
@@ -105,5 +107,13 @@ public class Usuario {
 
     public void setTreinos(List<Treino> treinos) {
         this.treinos = treinos;
+    }
+
+    public void setHistoricoRecompensas(List<Recompensa> historicoRecompensas) {
+        this.historicoRecompensas = historicoRecompensas;
+    }
+
+    public List<Recompensa> getHistoricoRecompensas() {
+        return historicoRecompensas;
     }
 }
