@@ -1,5 +1,6 @@
 package com.fitTracker.fitTracker.Service.impl;
 
+import com.fitTracker.fitTracker.Models.ERole;
 import com.fitTracker.fitTracker.Models.Recompensa;
 import com.fitTracker.fitTracker.Models.Usuario;
 import com.fitTracker.fitTracker.Repositories.RecompensaRepository;
@@ -7,6 +8,7 @@ import com.fitTracker.fitTracker.Repositories.UsuarioRepository;
 import com.fitTracker.fitTracker.Service.RecompensaService;
 import com.fitTracker.fitTracker.Util.ElementoExisteException;
 import com.fitTracker.fitTracker.Util.ElementoNaoEncontradoException;
+import com.fitTracker.fitTracker.Util.PermissaoInsuficienteException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
@@ -23,9 +25,12 @@ public class RecompensaServiceImpl implements RecompensaService {
 
     private UsuarioRepository usuarioRepository;
 
-    public Recompensa save(Recompensa recompensa) {
+    public Recompensa save(Recompensa recompensa, Usuario usuario) {
         if(recompensaRepository.exists(Example.of(recompensa))){
             throw new ElementoExisteException("Já existe um produto com essas informações");
+        }
+        if(usuario.getRoles().contains(ERole.ROLE_USER)){
+            throw new PermissaoInsuficienteException("Você não tem permissão para cadastrar uma recompensa");
         }
         return recompensaRepository.save(recompensa);
     }

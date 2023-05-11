@@ -19,7 +19,6 @@ public class MatriculaController {
     @PostMapping(produces = "application/json;charset=UTF-8")
     @ResponseStatus(HttpStatus.CREATED)
     public Matricula createMatricula(@RequestBody Matricula matricula) {
-
         try {
             return matriculaService.save(matricula);
         } catch (ElementoNaoEncontradoException ex) {
