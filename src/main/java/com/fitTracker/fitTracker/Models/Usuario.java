@@ -37,6 +37,10 @@ public class Usuario {
     @OneToOne
     private Pessoa pessoa;
 
+    @NotBlank
+    @Column
+    private int pontos;
+
     @ManyToMany
     @JoinTable(name = "usuario_treino", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name="treino_id"))
     private List<Treino> treinos = new ArrayList<>();
@@ -47,18 +51,21 @@ public class Usuario {
 
     @OneToMany
     private List<Recompensa> historicoRecompensas = new ArrayList<>();
+
     public Usuario() {
     }
 
     public Usuario(String username, String password) {
         this.username = username;
         this.password = password;
+        this.pontos = 0;
     }
 
     public Usuario(String username, String password, Set<Role> roles, Set<Checkin> checkins) {
         this.username = username;
         this.password = password;
         this.roles = roles;
+        this.pontos = 0;
     }
 
     public Long getId() {
@@ -111,6 +118,14 @@ public class Usuario {
 
     public void setHistoricoRecompensas(List<Recompensa> historicoRecompensas) {
         this.historicoRecompensas = historicoRecompensas;
+    }
+
+    public void setPontos(int pontos) {
+        this.pontos = pontos;
+    }
+
+    public int getPontos() {
+        return pontos;
     }
 
     public List<Recompensa> getHistoricoRecompensas() {
