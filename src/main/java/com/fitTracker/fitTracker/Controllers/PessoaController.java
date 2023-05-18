@@ -6,10 +6,14 @@ import com.fitTracker.fitTracker.Service.PessoaService;
 import com.fitTracker.fitTracker.Util.ElementoExisteException;
 import com.fitTracker.fitTracker.Util.ElementoNaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @RestController
 @RequestMapping("/people")
@@ -18,6 +22,7 @@ public class PessoaController {
     private PessoaService pessoaService;
 
     @PostMapping(produces = "application/json;charset=UTF-8")
+    @CrossOrigin(origins = "", allowedHeaders = "", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
     @ResponseStatus(HttpStatus.CREATED)
     public Pessoa create(@RequestBody Pessoa pessoa) {
         try {
@@ -60,3 +65,4 @@ public class PessoaController {
         }
     }
 }
+

@@ -54,7 +54,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests().anyRequest().permitAll();
         http.csrf().disable();
+        http.cors(); // Habilita as configurações CORS
         return http.build();
     }
-
 }

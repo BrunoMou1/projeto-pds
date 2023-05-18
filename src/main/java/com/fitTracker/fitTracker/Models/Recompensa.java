@@ -2,6 +2,7 @@ package com.fitTracker.fitTracker.Models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity(name = "recompensa")
 public class Recompensa {
@@ -17,11 +18,11 @@ public class Recompensa {
     @Column
     private String descricao;
 
-    @NotBlank
+    @NotNull
     @Column
-    private String valor;
+    private int valor;
 
-    @NotBlank
+    @NotNull
     @Column
     private int quantidade;
 
@@ -33,7 +34,7 @@ public class Recompensa {
 
     }
 
-    public Recompensa(String nome, String descricao, String valor, int quantidade, String imagemURL){
+    public Recompensa(String nome, String descricao, int valor, int quantidade, String imagemURL){
         this.nome = nome;
         this.descricao = descricao;
         this.valor = valor;
@@ -65,11 +66,11 @@ public class Recompensa {
         return descricao;
     }
 
-    public void setValor(String valor) {
+    public void setValor(int valor) {
         this.valor = valor;
     }
 
-    public String getValor() {
+    public int getValor() {
         return valor;
     }
 

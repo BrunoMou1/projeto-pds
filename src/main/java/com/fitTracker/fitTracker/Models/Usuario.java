@@ -13,6 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.hibernate.mapping.Join;
 
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class Usuario {
     @OneToOne
     private Pessoa pessoa;
 
-    @NotBlank
+    @NotNull
     @Column
     private int pontos;
 
@@ -55,17 +56,17 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario(String username, String password) {
+    public Usuario(String username, String password, int pontos) {
         this.username = username;
         this.password = password;
-        this.pontos = 0;
+        this.pontos = pontos;
     }
 
-    public Usuario(String username, String password, Set<Role> roles, Set<Checkin> checkins) {
+    public Usuario(String username, String password, Set<Role> roles, Set<Checkin> checkins, int pontos) {
         this.username = username;
         this.password = password;
         this.roles = roles;
-        this.pontos = 0;
+        this.pontos = pontos;
     }
 
     public Long getId() {

@@ -14,10 +14,4 @@ import java.util.List;
 public interface CheckinRepository extends JpaRepository<Checkin, Long> {
     List<Checkin> findByUsuarioId(Long id);
 
-    int countCheckinByDataAndUsuario(Date data, Usuario user);
-    //@Modifying
-    //@Transactional
-    //@Query("update usuario  u set u.historicoRecompensas = CONCAT_WS(',', u.historicoRecompensas, :checkin) where u
-    // .id = :userId)
-    //public int updateHistoricoCheckins(@Param("checkin") Checkin checkin, @Param("usuario") Long userId);
 }

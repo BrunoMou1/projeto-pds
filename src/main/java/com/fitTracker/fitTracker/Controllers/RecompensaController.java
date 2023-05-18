@@ -29,6 +29,7 @@ public class RecompensaController {
     @ResponseStatus(HttpStatus.CREATED)
     public Recompensa createRecompensa(@PathVariable Long id, @RequestBody Recompensa recompensa){
         Usuario usuario = usuarioService.findById(id).get();
+        System.out.println(usuario);
         try{
             return recompensaService.save(recompensa, usuario);
         } catch (PermissaoInsuficienteException exception){
@@ -63,9 +64,9 @@ public class RecompensaController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{usuarioId}/{recompensaId}")
     @ResponseStatus(HttpStatus.OK)
-    public void RedeemRecompensaAndPushInUser(@PathVariable Long usuarioId, Long recompensaId){
+    public void RedeemRecompensaAndPushInUser(@PathVariable Long usuarioId,@PathVariable Long recompensaId){
         try{
             recompensaService.redeemById(usuarioId, recompensaId);
         } catch(ElementoNaoEncontradoException exception){
