@@ -15,4 +15,6 @@ public interface PessoaService {
     public Optional<Pessoa> findById(Long id);
 
     public void updateTelefone(Pessoa pessoa);
+
+    public void validar(Pessoa pessoa);
 }
