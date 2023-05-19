@@ -41,7 +41,6 @@ public class PessoaController {
     }
 
     @PutMapping(value="/{id}", produces = "application/json;charset=UTF-8")
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity update(@PathVariable("id") Long id, @RequestBody Pessoa pessoa) {
         pessoa.setId(id);
 
@@ -55,7 +54,6 @@ public class PessoaController {
 
 
     @GetMapping(value="/{cpf}", produces = "application/json;charset=UTF-8")
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity findByCpf(@PathVariable("cpf") String cpf){
         try {
             Pessoa pessoaEncontrada = pessoaService.findByCpf(cpf).get();
