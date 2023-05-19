@@ -4,8 +4,10 @@ import com.fitTracker.fitTracker.Models.Plano;
 import com.fitTracker.fitTracker.Service.PlanoService;
 import com.fitTracker.fitTracker.Service.impl.PlanoServiceImpl;
 import com.fitTracker.fitTracker.Util.ElementoNaoEncontradoException;
+import com.fitTracker.fitTracker.Util.RegraNegocioException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -19,36 +21,38 @@ public class PlanoController {
     private PlanoService planoService;
 
     @PostMapping(produces = "application/json;charset=UTF-8")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Plano create(@RequestBody Plano plano){
-        return planoService.create(plano);
+    public ResponseEntity create(@RequestBody Plano plano){
+        try {
+            Plano planoSalvo = planoService.create(plano);
+
+            return new ResponseEntity(planoSalvo, HttpStatus.CREATED);
+        } catch (RegraNegocioException ex){
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public List<Plano> findAll() {
-        return planoService.findAll();
+    public ResponseEntity findAll() {
+        return ResponseEntity.ok(planoService.findAll());
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Plano findById(@PathVariable("id") Long id) {
+    public ResponseEntity findById(@PathVariable("id") Long id) {
         try {
-            return planoService.findById(id).get();
+            return ResponseEntity.ok(planoService.findById(id).get());
         } catch (ElementoNaoEncontradoException ex) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
+            return ResponseEntity.badRequest().body(ex.getMessage());
         }
     }
 
     @PutMapping(value="/{id}", produces = "application/json;charset=UTF-8")
-    @ResponseStatus(HttpStatus.OK)
-    public void updatePlano(@PathVariable("id") Long id, @RequestBody Plano plano){
+    public ResponseEntity updatePlano(@PathVariable("id") Long id, @RequestBody Plano plano){
         plano.setId(id);
-
         try {
             planoService.update(plano);
-        } catch (ElementoNaoEncontradoException ex) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
+            return ResponseEntity.ok().build();
+        } catch (ElementoNaoEncontradoException | RegraNegocioException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
         }
     }
 

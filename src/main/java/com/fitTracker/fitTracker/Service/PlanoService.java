@@ -16,4 +16,6 @@ public interface PlanoService {
     public Optional<Plano> findById(Long id);
 
     public void update(Plano plano);
+
+    public void validar(Plano plano);
 }
