@@ -22,4 +22,8 @@ public interface TreinoService {
     Nivel updateNivel(Nivel nivel);
 
     void deleteNivel(Long nivelId);
+
+    void validarNivel(Nivel nivel);
+
+    void validarTreino(Treino treino);
 }

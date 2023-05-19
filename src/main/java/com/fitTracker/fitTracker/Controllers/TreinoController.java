@@ -5,8 +5,11 @@ import com.fitTracker.fitTracker.Models.Treino;
 import com.fitTracker.fitTracker.Service.TreinoService;
 import com.fitTracker.fitTracker.Util.ElementoExisteException;
 import com.fitTracker.fitTracker.Util.ElementoNaoEncontradoException;
+import com.fitTracker.fitTracker.Util.RegraNegocioException;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -20,78 +23,82 @@ public class TreinoController {
     TreinoService treinoService;
 
     @PostMapping(value="/level", produces = "application/json;charset=UTF-8")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Nivel createNivel(@RequestBody Nivel nivel) {
+    public ResponseEntity createNivel(@RequestBody Nivel nivel) {
         try {
-            return treinoService.createNivel(nivel);
-        } catch (ElementoNaoEncontradoException ex) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
+            Nivel nivelSalvo = treinoService.createNivel(nivel);
+
+            return new ResponseEntity(nivelSalvo, HttpStatus.CREATED);
+        } catch (ElementoNaoEncontradoException | RegraNegocioException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
         }
     }
 
     @PostMapping(produces = "application/json;charset=UTF-8")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Treino createTreino(@RequestBody Treino treino) {
+    public ResponseEntity createTreino(@RequestBody Treino treino) {
         try {
-            return treinoService.createTreino(treino);
-        } catch (ElementoNaoEncontradoException ex) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
+            Treino treinoSalvo = treinoService.createTreino(treino);
+
+            return new ResponseEntity(treinoSalvo, HttpStatus.CREATED);
+        } catch (ElementoNaoEncontradoException | RegraNegocioException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
         }
     }
 
     @GetMapping(value="/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public List<Treino> findTreinoByIdNivel(@PathVariable("id") Long nivelId){
+    public ResponseEntity findTreinoByIdNivel(@PathVariable("id") Long nivelId){
         try {
-            return treinoService.findTreinoByNivelId(nivelId);
+            List<Treino> lista = treinoService.findTreinoByNivelId(nivelId);
+
+            return ResponseEntity.ok(lista);
         }catch (ElementoNaoEncontradoException ex) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
+            return ResponseEntity.badRequest().body(ex.getMessage());
         }
     }
 
     @GetMapping(value="/level")
-    @ResponseStatus(HttpStatus.OK)
-    public List<Nivel> findAllNivel() {
-        return treinoService.findAllNivel();
+    public ResponseEntity findAllNivel() {
+        return ResponseEntity.ok(treinoService.findAllNivel());
     }
 
     @PutMapping(value="/level", produces = "application/json;charset=UTF-8")
-    @ResponseStatus(HttpStatus.OK)
-    public Nivel updateNivel(@RequestBody Nivel nivel){
+    public ResponseEntity updateNivel(@RequestBody Nivel nivel){
         try{
-            return treinoService.updateNivel(nivel);
-        }catch (ElementoNaoEncontradoException ex){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
+            Nivel nivelAtualizado = treinoService.updateNivel(nivel);
+
+            return ResponseEntity.ok(nivelAtualizado);
+        }catch (ElementoNaoEncontradoException | RegraNegocioException ex){
+            return ResponseEntity.badRequest().body(ex.getMessage());
         }
     }
 
     @PutMapping(produces = "application/json;charset=UTF-8")
-    @ResponseStatus(HttpStatus.OK)
-    public Treino updateTreino(@RequestBody Treino treino){
+    public ResponseEntity updateTreino(@RequestBody Treino treino){
         try{
-            return treinoService.updateTreino(treino);
-        }catch (ElementoNaoEncontradoException ex){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
+            Treino treinoAtualizado = treinoService.updateTreino(treino);
+
+            return ResponseEntity.ok(treinoAtualizado);
+        }catch (ElementoNaoEncontradoException | RegraNegocioException ex){
+            return ResponseEntity.badRequest().body(ex.getMessage());
         }
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public void deleteTreino(@PathVariable("id") Long treinoId){
+    public ResponseEntity deleteTreino(@PathVariable("id") Long treinoId){
         try{
             treinoService.deleteTreino(treinoId);
-        }catch (ElementoNaoEncontradoException ex){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
+            return ResponseEntity.ok().build();
+        }catch (ElementoNaoEncontradoException | RegraNegocioException ex){
+            return ResponseEntity.badRequest().body(ex.getMessage());
         }
     }
 
     @DeleteMapping("/level/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public void deleteNivel(@PathVariable("id") Long nivelId){
+    public ResponseEntity deleteNivel(@PathVariable("id") Long nivelId){
         try{
             treinoService.deleteNivel(nivelId);
+            return ResponseEntity.ok().build();
         }catch (ElementoNaoEncontradoException | ElementoExisteException ex){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
+            return ResponseEntity.badRequest().body(ex.getMessage());
         }
     }
 }
