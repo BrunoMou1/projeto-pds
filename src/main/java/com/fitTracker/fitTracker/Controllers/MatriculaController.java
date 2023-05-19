@@ -3,8 +3,10 @@ package com.fitTracker.fitTracker.Controllers;
 import com.fitTracker.fitTracker.Models.Matricula;
 import com.fitTracker.fitTracker.Service.MatriculaService;
 import com.fitTracker.fitTracker.Util.ElementoNaoEncontradoException;
+import com.fitTracker.fitTracker.Util.RegraNegocioException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -17,49 +19,47 @@ public class MatriculaController {
     MatriculaService matriculaService;
 
     @PostMapping(produces = "application/json;charset=UTF-8")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Matricula createMatricula(@RequestBody Matricula matricula) {
+    public ResponseEntity createMatricula(@RequestBody Matricula matricula) {
 
         try {
-            return matriculaService.save(matricula);
-        } catch (ElementoNaoEncontradoException ex) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
+            Matricula matriculaSalva = matriculaService.save(matricula);
+            return new ResponseEntity(matriculaSalva, HttpStatus.CREATED);
+        } catch (ElementoNaoEncontradoException | RegraNegocioException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
         }
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public List<Matricula> listByIdUsuario(@PathVariable Long id) {
+    public ResponseEntity listByIdUsuario(@PathVariable Long id) {
         try {
-            return matriculaService.listByUsuarioId(id);
+            return ResponseEntity.ok(matriculaService.listByUsuarioId(id));
         } catch (ElementoNaoEncontradoException ex) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
+            return ResponseEntity.badRequest().body(ex.getMessage());
         }
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public void deleteMatricula(@PathVariable Long id) {
+    public ResponseEntity deleteMatricula(@PathVariable Long id) {
         try {
             matriculaService.deleteById(id);
+            return ResponseEntity.ok().build();
         } catch (ElementoNaoEncontradoException ex) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
+            return ResponseEntity.badRequest().body(ex.getMessage());
         }
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public List<Matricula> listAll() {
-        return matriculaService.listAll();
+    public ResponseEntity listAll() {
+        return ResponseEntity.ok(matriculaService.listAll());
     }
 
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public void enableOrDisableStatusById(@PathVariable Long id) {
+    public ResponseEntity enableOrDisableStatusById(@PathVariable Long id) {
         try {
             matriculaService.enableOrDisableStatusById(id);
+            return ResponseEntity.ok().build();
         } catch (ElementoNaoEncontradoException ex) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
+            return ResponseEntity.badRequest().body(ex.getMessage());
         }
     }
 }

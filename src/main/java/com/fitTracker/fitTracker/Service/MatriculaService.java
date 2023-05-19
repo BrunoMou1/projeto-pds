@@ -18,4 +18,6 @@ public interface MatriculaService {
     public List<Matricula> listByUsuarioId(Long id);
 
     public void enableOrDisableStatusById(Long id);
+
+    public void validar(Matricula matricula);
 }

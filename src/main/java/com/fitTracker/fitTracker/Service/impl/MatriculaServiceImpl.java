@@ -5,6 +5,7 @@ import com.fitTracker.fitTracker.Repositories.MatriculaRepository;
 import com.fitTracker.fitTracker.Repositories.UsuarioRepository;
 import com.fitTracker.fitTracker.Service.MatriculaService;
 import com.fitTracker.fitTracker.Util.ElementoNaoEncontradoException;
+import com.fitTracker.fitTracker.Util.RegraNegocioException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,8 @@ public class MatriculaServiceImpl implements MatriculaService {
 
     @Override
     public Matricula save(Matricula matricula) {
+
+        validar(matricula);
 
         if(usuarioRepository.findById(matricula.getUsuario().getId()).isEmpty()){
             throw new ElementoNaoEncontradoException("Não foi encontrado nenhum usuario com esse id!");
@@ -87,5 +90,18 @@ public class MatriculaServiceImpl implements MatriculaService {
         }
     }
 
+
+    @Override
+    public void validar(Matricula matricula){
+        if(matricula.getStatus() == null || matricula.getStatus().trim().equals("")){
+            throw new RegraNegocioException("Informe um status válido.");
+        }
+        if(matricula.getValor() == null || matricula.getValor().trim().equals("")){
+            throw new RegraNegocioException("Informe um valor válido.");
+        }
+        if(matricula.getDataVencimento() == null || matricula.getDataVencimento().trim().equals("")){
+            throw new RegraNegocioException("Informe uma data de vencimento válida.");
+        }
+    }
 
 }
