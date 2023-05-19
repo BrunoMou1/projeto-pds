@@ -68,7 +68,7 @@ public class RecompensaController {
     @ResponseStatus(HttpStatus.OK)
     public void RedeemRecompensaAndPushInUser(@PathVariable Long usuarioId,@PathVariable Long recompensaId){
         try{
-            recompensaService.redeemById(usuarioId, recompensaId);
+            recompensaService.redeemById(recompensaId, usuarioId);
         } catch(ElementoNaoEncontradoException exception){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage());
         }

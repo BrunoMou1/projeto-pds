@@ -58,7 +58,6 @@ public class RecompensaServiceImpl implements RecompensaService {
     public void redeemById(Long recompensaId, Long userId){
         Optional<Recompensa> recompensaOp = recompensaRepository.findById(recompensaId);
         Optional<Usuario> usuarioOp = usuarioRepository.findById(userId);
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         if(recompensaOp.isEmpty()){
             throw new ElementoNaoEncontradoException("Não foi encontrado nenhuma recompensa com esse id!");
         }
