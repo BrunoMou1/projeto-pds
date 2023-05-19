@@ -13,6 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.hibernate.mapping.Join;
 
 import java.util.ArrayList;
@@ -37,6 +38,14 @@ public class Usuario {
     @OneToOne
     private Pessoa pessoa;
 
+    @NotNull
+    @Column
+    private int pontos;
+
+    @NotNull
+    @Column
+    private double multiplicador;
+
     @ManyToMany
     @JoinTable(name = "usuario_treino", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name="treino_id"))
     private List<Treino> treinos = new ArrayList<>();
@@ -45,18 +54,26 @@ public class Usuario {
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
+    @OneToMany
+    private List<Recompensa> historicoRecompensas = new ArrayList<>();
+
     public Usuario() {
     }
 
-    public Usuario(String username, String password) {
+    public Usuario(String username, String password, int pontos, double multiplicador) {
         this.username = username;
         this.password = password;
+        this.pontos = pontos;
+        this.multiplicador = multiplicador;
     }
 
-    public Usuario(String username, String password, Set<Role> roles, Set<Checkin> checkins) {
+    public Usuario(String username, String password, Set<Role> roles, Set<Checkin> checkins, int pontos,
+                   double multiplicador) {
         this.username = username;
         this.password = password;
         this.roles = roles;
+        this.pontos = pontos;
+        this.multiplicador = multiplicador;
     }
 
     public Long getId() {
@@ -105,5 +122,29 @@ public class Usuario {
 
     public void setTreinos(List<Treino> treinos) {
         this.treinos = treinos;
+    }
+
+    public void setHistoricoRecompensas(List<Recompensa> historicoRecompensas) {
+        this.historicoRecompensas = historicoRecompensas;
+    }
+
+    public void setPontos(int pontos) {
+        this.pontos = pontos;
+    }
+
+    public int getPontos() {
+        return pontos;
+    }
+
+    public void setMultiplicador(double multiplicador) {
+        this.multiplicador = multiplicador;
+    }
+
+    public double getMultiplicador() {
+        return multiplicador;
+    }
+
+    public List<Recompensa> getHistoricoRecompensas() {
+        return historicoRecompensas;
     }
 }
