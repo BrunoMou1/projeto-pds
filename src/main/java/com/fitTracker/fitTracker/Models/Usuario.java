@@ -42,6 +42,10 @@ public class Usuario {
     @Column
     private int pontos;
 
+    @NotNull
+    @Column
+    private double multiplicador;
+
     @ManyToMany
     @JoinTable(name = "usuario_treino", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name="treino_id"))
     private List<Treino> treinos = new ArrayList<>();
@@ -56,17 +60,20 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario(String username, String password, int pontos) {
+    public Usuario(String username, String password, int pontos, double multiplicador) {
         this.username = username;
         this.password = password;
         this.pontos = pontos;
+        this.multiplicador = multiplicador;
     }
 
-    public Usuario(String username, String password, Set<Role> roles, Set<Checkin> checkins, int pontos) {
+    public Usuario(String username, String password, Set<Role> roles, Set<Checkin> checkins, int pontos,
+                   double multiplicador) {
         this.username = username;
         this.password = password;
         this.roles = roles;
         this.pontos = pontos;
+        this.multiplicador = multiplicador;
     }
 
     public Long getId() {
@@ -127,6 +134,14 @@ public class Usuario {
 
     public int getPontos() {
         return pontos;
+    }
+
+    public void setMultiplicador(double multiplicador) {
+        this.multiplicador = multiplicador;
+    }
+
+    public double getMultiplicador() {
+        return multiplicador;
     }
 
     public List<Recompensa> getHistoricoRecompensas() {
