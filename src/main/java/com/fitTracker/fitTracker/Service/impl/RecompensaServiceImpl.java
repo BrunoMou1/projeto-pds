@@ -24,13 +24,7 @@ public class RecompensaServiceImpl implements RecompensaService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public Recompensa save(Recompensa recompensa, Usuario usuario) {
-        /*if(recompensaRepository.exists(Example.of(recompensa))){
-            throw new ElementoExisteException("Já existe um produto com essas informações");
-        }
-        if(usuario.getRoles().contains(ERole.ROLE_USER)){
-            throw new PermissaoInsuficienteException("Você não tem permissão para cadastrar uma recompensa");
-        }*/
+    public Recompensa save(Recompensa recompensa) {
         return recompensaRepository.save(recompensa);
     }
 

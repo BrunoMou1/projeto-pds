@@ -25,13 +25,11 @@ public class RecompensaController {
     @Autowired
     private UsuarioServiceImpl usuarioService;
 
-    @PostMapping(value = "/{id}", produces = "application/json;charset=UTF-8")
+    @PostMapping(produces = "application/json;charset=UTF-8")
     @ResponseStatus(HttpStatus.CREATED)
-    public Recompensa createRecompensa(@PathVariable Long id, @RequestBody Recompensa recompensa){
-        Usuario usuario = usuarioService.findById(id).get();
-        System.out.println(usuario);
+    public Recompensa createRecompensa(@RequestBody Recompensa recompensa){
         try{
-            return recompensaService.save(recompensa, usuario);
+            return recompensaService.save(recompensa);
         } catch (PermissaoInsuficienteException exception){
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, exception.getMessage());
         }
