@@ -1,6 +1,7 @@
 package com.fitTracker.fitTracker.Models;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,6 +22,7 @@ public class Pagamento {
 
     @NotBlank
     @Column
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd-MM-yyyy")
     private Date dataPagamento;
 
     @NotBlank
