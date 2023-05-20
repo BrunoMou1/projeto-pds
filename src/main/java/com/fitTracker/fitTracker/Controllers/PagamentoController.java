@@ -16,10 +16,6 @@ public class PagamentoController {
     @Autowired
     private PagamentoServiceImpl pagamentoService;
 
-    @Autowired
-    private MatriculaServiceImpl matriculaService;
-
-
     @PostMapping("/pagamento")
     public Pagamento create(@RequestBody Pagamento pagamento) {
         try {

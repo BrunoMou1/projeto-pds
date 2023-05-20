@@ -1,4 +1,5 @@
 package com.fitTracker.fitTracker.Service.impl;
+import com.fitTracker.fitTracker.Models.Matricula;
 import com.fitTracker.fitTracker.Models.Pagamento;
 import com.fitTracker.fitTracker.Repositories.MatriculaRepository;
 import com.fitTracker.fitTracker.Repositories.PagamentoRepository;
@@ -7,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,9 +30,24 @@ public class PagamentoServiceImpl {
     }
 
     public Pagamento save(Pagamento pagamento) {
-        if(matriculaRepository.findById(pagamento.getMatricula().getId()).isEmpty()){
+        Matricula matricula = matriculaRepository.findById(pagamento.getMatricula().getId()).get();
+        if(matricula == null){
             throw new ElementoNaoEncontradoException("Não foi encontrado nenhuma matricula com esse id!");
         }
+
+        if(matricula.getStatus().equals("Cancelado")){
+            throw new ElementoNaoEncontradoException("Não é possível realizar um pagamento para uma matricula cancelada!");
+        }
+
+        if(matricula.getStatus().equals("Pago")){
+            throw new ElementoNaoEncontradoException("Não é possível realizar um pagamento para uma matricula já paga!");
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate dataVencimento = LocalDate.parse(matricula.getDataVencimento(), formatter);
+        LocalDate novaDataVencimento = dataVencimento.plusMonths(1);
+        String novaDataVencimentoString = novaDataVencimento.format(formatter);
+        matricula.setDataVencimento(novaDataVencimentoString);
 
         return pagamentoRepository.save(pagamento);
     }

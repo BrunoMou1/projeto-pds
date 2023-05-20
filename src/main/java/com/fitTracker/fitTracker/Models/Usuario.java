@@ -54,7 +54,8 @@ public class Usuario {
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    @OneToMany
+    @ManyToMany
+    @JoinTable(name = "usuario_recompensa", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name = "recompensa_id"))
     private List<Recompensa> historicoRecompensas = new ArrayList<>();
 
     public Usuario() {
