@@ -21,7 +21,7 @@ public class PagamentoController {
         try {
             return pagamentoService.save(pagamento);
         } catch (Exception ex) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
         }
     }
 
