@@ -23,7 +23,7 @@ public class Pagamento {
     @NotBlank
     @Column
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd-MM-yyyy")
-    private Date dataPagamento;
+    private String dataPagamento;
 
     @NotBlank
     @Column
