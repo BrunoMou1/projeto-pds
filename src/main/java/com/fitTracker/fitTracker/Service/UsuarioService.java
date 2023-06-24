@@ -13,6 +13,8 @@ public interface UsuarioService {
 
     public Optional<Usuario> findByUsername(String username);
 
+    public Optional<Usuario> findByEmail(String email);
+
     public Optional<Usuario> findById(Long id);
 
     public void deleteById(Long id);
