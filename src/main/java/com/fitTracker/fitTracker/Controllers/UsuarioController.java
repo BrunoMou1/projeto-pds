@@ -48,7 +48,7 @@ public class UsuarioController {
         }
     }
 
-    @GetMapping
+    @GetMapping("/username")
     public Usuario getUsuarioByUsername(@RequestParam String username) {
         return usuarioService.findByUsername(username).get();
     }
