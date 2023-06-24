@@ -49,8 +49,8 @@ public class UsuarioController {
     }
 
     @GetMapping
-    public Usuario getUsuarioByEmail(@RequestParam String email) {
-        return usuarioService.findByEmail(email).get();
+    public Usuario getUsuarioByUsername(@RequestParam String username) {
+        return usuarioService.findByUsername(username).get();
     }
 
     @DeleteMapping(value="/{usuarioId}/training/{treinoId}")
