@@ -48,6 +48,11 @@ public class UsuarioController {
         }
     }
 
+    @GetMapping("/username")
+    public Usuario getUsuarioByUsername(@RequestParam String username) {
+        return usuarioService.findByUsername(username).get();
+    }
+
     @DeleteMapping(value="/{usuarioId}/training/{treinoId}")
     public void removeTreino(@PathVariable("usuarioId") Long usuarioId, @PathVariable("treinoId") Long treinoId){
         try{

@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-public interface PessoaRepository extends JpaRepository<Pessoa, Long> {
+public interface PessoaRepository extends GenericRepository<Pessoa, Long> {
     public Optional<Pessoa> findByCpf(String cpf);
 
     @Modifying

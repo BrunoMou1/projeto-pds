@@ -2,7 +2,7 @@ package com.fitTracker.fitTracker.Service.impl;
 
 import com.fitTracker.fitTracker.Models.Treino;
 import com.fitTracker.fitTracker.Models.Usuario;
-import com.fitTracker.fitTracker.Repositories.TreinoRepository;
+import com.fitTracker.fitTracker.Repositories.AtividadeRepository;
 import com.fitTracker.fitTracker.Repositories.UsuarioRepository;
 import com.fitTracker.fitTracker.Service.UsuarioService;
 import com.fitTracker.fitTracker.Util.ElementoExisteException;
@@ -20,7 +20,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     UsuarioRepository usuarioRepository;
 
     @Autowired
-    TreinoRepository treinoRepository;
+    AtividadeRepository atividadeRepository;
 
     @Override
     public Usuario create(Usuario usuario) {
@@ -54,7 +54,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         if(usuario != null){
 
-            Treino treino = treinoRepository.findById(treinoId).get();
+            Treino treino = (Treino) atividadeRepository.findById(treinoId).get();
 
             if(treino != null){
 
@@ -78,7 +78,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         if(usuario != null){
 
-            Treino treino = treinoRepository.findById(treinoId).get();
+            Treino treino = (Treino) atividadeRepository.findById(treinoId).get();
 
             if(treino != null){
 

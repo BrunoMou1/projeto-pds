@@ -3,9 +3,11 @@ package com.fitTracker.fitTracker.Service.impl;
 import com.fitTracker.fitTracker.Models.ERole;
 import com.fitTracker.fitTracker.Models.Recompensa;
 import com.fitTracker.fitTracker.Models.Usuario;
+import com.fitTracker.fitTracker.Repositories.FrequenciaRepository;
 import com.fitTracker.fitTracker.Repositories.RecompensaRepository;
 import com.fitTracker.fitTracker.Repositories.UsuarioRepository;
 import com.fitTracker.fitTracker.Service.RecompensaService;
+import com.fitTracker.fitTracker.Strategy.EstrategiaRecompensa;
 import com.fitTracker.fitTracker.Util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -24,13 +26,10 @@ public class RecompensaServiceImpl implements RecompensaService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public Recompensa save(Recompensa recompensa, Usuario usuario) {
-        /*if(recompensaRepository.exists(Example.of(recompensa))){
-            throw new ElementoExisteException("Já existe um produto com essas informações");
-        }
-        if(usuario.getRoles().contains(ERole.ROLE_USER)){
-            throw new PermissaoInsuficienteException("Você não tem permissão para cadastrar uma recompensa");
-        }*/
+    @Autowired
+    private FrequenciaRepository frequenciaRepository;
+
+    public Recompensa save(Recompensa recompensa) {
         return recompensaRepository.save(recompensa);
     }
 
@@ -49,6 +48,20 @@ public class RecompensaServiceImpl implements RecompensaService {
         }
 
         return recompensa;
+    }
+
+    @Override
+    public void gerarPontuacao(Long idUsuario, EstrategiaRecompensa estrategiaRecompensa) {
+
+        Optional<Usuario> usuarioOp = usuarioRepository.findById(idUsuario);
+        if(usuarioOp.isEmpty()){
+            throw new ElementoNaoEncontradoException("Não foi encontrado nenhuma recompensa com esse id!");
+        }
+
+        estrategiaRecompensa.addGenericRepository(frequenciaRepository);
+        estrategiaRecompensa.addGenericRepository(usuarioRepository);
+
+        estrategiaRecompensa.gerarPontuacaoUsuario(usuarioOp.get());
     }
 
     public List<Recompensa> listAll(){

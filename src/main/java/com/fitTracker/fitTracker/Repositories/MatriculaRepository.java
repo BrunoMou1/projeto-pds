@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface MatriculaRepository extends JpaRepository<Matricula, Long> {
+public interface MatriculaRepository extends GenericRepository<Matricula, Long> {
 
     public List<Matricula> findByUsuarioId(Long id);
 

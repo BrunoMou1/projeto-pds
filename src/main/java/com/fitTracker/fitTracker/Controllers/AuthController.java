@@ -60,12 +60,6 @@ public class AuthController {
                 .body(userDetails);
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
-    @GetMapping("teste")
-    public String teste() {
-        return "teste";
-    }
-
     @PostMapping("cadastrar")
     public ResponseEntity<?> registerUser(@Valid @RequestBody Usuario usuario) {
         if (usuarioRepository.existsByUsername(usuario.getUsername())) {
@@ -75,28 +69,24 @@ public class AuthController {
         }
 
         usuario.setPassword(encoder.encode(usuario.getPassword()));
-
-        Set<String> strRoles = new HashSet<>();
-        usuario.getRoles().forEach(role -> {
-            strRoles.add(role.getName().name());
-        });
+        Set<Role> strRoles = usuario.getRoles();
         Set<Role> roles = new HashSet<>();
 
         if (strRoles == null) {
-            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+            Role userRole = roleRepository.findByName(ERole.USER)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(userRole);
         } else {
             strRoles.forEach(role -> {
-                switch (role) {
+                switch (role.getName().toString()) {
                     case "admin":
-                        Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                        Role adminRole = roleRepository.findByName(ERole.ADMIN)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(adminRole);
 
                         break;
                     default:
-                        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                        Role userRole = roleRepository.findByName(ERole.USER)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(userRole);
                 }

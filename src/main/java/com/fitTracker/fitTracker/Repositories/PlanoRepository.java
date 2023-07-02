@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-public interface PlanoRepository extends JpaRepository<Plano, Long> {
+public interface PlanoRepository extends GenericRepository<Plano, Long> {
     Optional<Plano> findByNome(String nome);
 
     @Modifying
