@@ -26,9 +26,12 @@ public class RecompensaServiceImpl implements RecompensaService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+<<<<<<< HEAD
     @Autowired
     private FrequenciaRepository frequenciaRepository;
 
+=======
+>>>>>>> f6534519ff0c64483d26fe8a9af61d973acc4e94
     public Recompensa save(Recompensa recompensa) {
         return recompensaRepository.save(recompensa);
     }
