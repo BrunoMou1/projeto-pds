@@ -25,7 +25,7 @@ public class RecompensaServiceImpl implements RecompensaService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
-    
+
     @Autowired
     private FrequenciaRepository frequenciaRepository;
 

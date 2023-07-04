@@ -1,8 +1,6 @@
 package com.fitTracker.fitTracker.Controllers;
 
-import com.fitTracker.fitTracker.Models.ERole;
 import com.fitTracker.fitTracker.Models.Recompensa;
-import com.fitTracker.fitTracker.Models.Usuario;
 import com.fitTracker.fitTracker.Service.impl.RecompensaServiceImpl;
 import com.fitTracker.fitTracker.Service.impl.UsuarioServiceImpl;
 import com.fitTracker.fitTracker.Util.ElementoNaoEncontradoException;
@@ -44,7 +42,7 @@ public class RecompensaController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void DeleteRecompensaById(@PathVariable Long id){
+    public void deleteRecompensaById(@PathVariable Long id){
         try{
             recompensaService.deleteById(id);
         } catch(ElementoNaoEncontradoException exception){
@@ -54,7 +52,7 @@ public class RecompensaController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Optional<Recompensa> FindRecompensaById(@PathVariable Long id){
+    public Optional<Recompensa> findRecompensaById(@PathVariable Long id){
         try{
             return recompensaService.findById(id);
         } catch(ElementoNaoEncontradoException exception){
@@ -64,7 +62,7 @@ public class RecompensaController {
 
     @PutMapping("/{usuarioId}/{recompensaId}")
     @ResponseStatus(HttpStatus.OK)
-    public void RedeemRecompensaAndPushInUser(@PathVariable Long usuarioId,@PathVariable Long recompensaId){
+    public void redeemRecompensaAndPushInUser(@PathVariable Long usuarioId, @PathVariable Long recompensaId){
         try{
             recompensaService.redeemById(recompensaId, usuarioId);
         } catch(ElementoNaoEncontradoException exception){
