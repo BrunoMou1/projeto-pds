@@ -1,6 +1,7 @@
 package com.fitTracker.fitTracker.Service;
 
 import com.fitTracker.fitTracker.Models.Atividade;
+import com.fitTracker.fitTracker.Models.AtividadeIdiomas;
 import com.fitTracker.fitTracker.Models.Nivel;
 import com.fitTracker.fitTracker.Strategy.EstrategiaAtividade;
 
@@ -13,6 +14,10 @@ public interface AtividadeService {
     Atividade createAtividade(Atividade atividade, EstrategiaAtividade estrategiaAtividade);
 
     List<Atividade> findAtividadeByNivelId(Long nivelId);
+
+    Atividade findAtividadeByAtividadeId(Long atividadeId);
+
+    public List<String> checkIfCorrectAnswer(Atividade atividade, Long userId, List<String> responses);
 
     List<Nivel> findAllNivel();
 

@@ -47,8 +47,9 @@ public class Usuario {
     private double multiplicador;
 
     @ManyToMany
-    @JoinTable(name = "usuario_treino", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name="treino_id"))
-    private List<Treino> treinos = new ArrayList<>();
+    @JoinTable(name = "usuario_atividades", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns =
+    @JoinColumn(name="treino_id"))
+    private List<AtividadeIdiomas> atividades = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -117,12 +118,12 @@ public class Usuario {
         this.pessoa = pessoa;
     }
 
-    public List<Treino> getTreinos() {
-        return treinos;
+    public List<AtividadeIdiomas> getAtividades() {
+        return atividades;
     }
 
-    public void setTreinos(List<Treino> treinos) {
-        this.treinos = treinos;
+    public void setAtividades(List<AtividadeIdiomas> atividades) {
+        this.atividades = atividades;
     }
 
     public void setHistoricoRecompensas(List<Recompensa> historicoRecompensas) {

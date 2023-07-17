@@ -1,8 +1,6 @@
 package com.fitTracker.fitTracker.Service.impl;
 
-import com.fitTracker.fitTracker.Models.Atividade;
-import com.fitTracker.fitTracker.Models.Nivel;
-import com.fitTracker.fitTracker.Models.Treino;
+import com.fitTracker.fitTracker.Models.*;
 import com.fitTracker.fitTracker.Repositories.NivelRepository;
 import com.fitTracker.fitTracker.Repositories.AtividadeRepository;
 import com.fitTracker.fitTracker.Repositories.UsuarioRepository;
@@ -15,7 +13,9 @@ import com.fitTracker.fitTracker.Util.RegraNegocioException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AtividadeServiceImpl implements AtividadeService {
@@ -41,14 +41,14 @@ public class AtividadeServiceImpl implements AtividadeService {
     @Override
     public Atividade createAtividade(Atividade atividade, EstrategiaAtividade estrategiaAtividade) {
 
-        Treino treino = (Treino) atividade;
+        AtividadeIdiomas atividadeIdiomas = (AtividadeIdiomas) atividade;
 
-        validarAtividade(treino, estrategiaAtividade);
+        validarAtividade(atividadeIdiomas, estrategiaAtividade);
 
         if(nivelRepository.findById(atividade.getNivel().getId()).isPresent()) {
-            return estrategiaAtividade.create(treino);
+            return estrategiaAtividade.create(atividadeIdiomas);
         } else {
-            throw new ElementoNaoEncontradoException("O nivel informado no treino não foi encontrado!");
+            throw new ElementoNaoEncontradoException("O nivel informado na atividade não foi encontrado!");
         }
     }
 
@@ -59,6 +59,53 @@ public class AtividadeServiceImpl implements AtividadeService {
         } else {
             throw new ElementoNaoEncontradoException("O nivel informado não foi encontrado!");
         }
+    }
+
+    @Override
+    public Atividade findAtividadeByAtividadeId(Long atividadeId) {
+        if(atividadeRepository.findById(atividadeId).isPresent()){
+            return atividadeRepository.findById(atividadeId).get();
+        } else {
+            throw new ElementoNaoEncontradoException("A atividade informada não foi encontrada!");
+        }
+    }
+
+    @Override
+    public List<String> checkIfCorrectAnswer(Atividade atividade, Long userId, List<String> responses){
+        AtividadeIdiomas atividadeIdiomas = (AtividadeIdiomas) atividade;
+
+        Optional<Usuario> userOp = usuarioRepository.findById(userId);
+
+        if(!userOp.isPresent()){
+            throw new ElementoNaoEncontradoException("O usuário informado não foi encontrado no sistema");
+        }
+
+        Usuario user = userOp.get();
+        List<Questao> questoes = atividadeIdiomas.getQuestoes();
+        List<String> gabarito = new ArrayList<>();
+        int qntRespostasCertas = 0;
+
+        for(int i = 0; i < questoes.size(); i++){
+            String respostaCorreta = questoes.get(i).getRespostaCorreta();
+            String userResponse = responses.get(i);
+
+            if(respostaCorreta.equals(userResponse)){
+                qntRespostasCertas++;
+                gabarito.add("Acertou!");
+            } else {
+                gabarito.add("Errou...");
+            }
+        }
+
+        if(qntRespostasCertas >= Math.round(questoes.size()) * 0.7){
+            List<AtividadeIdiomas> listaAtividadesFeitas = user.getAtividades();
+            listaAtividadesFeitas.add(atividadeIdiomas);
+            user.setAtividades(listaAtividadesFeitas);
+            user.setPontos(user.getPontos() + atividadeIdiomas.getPontuacao());
+            usuarioRepository.save(user);
+        }
+
+        return gabarito;
     }
 
     @Override
@@ -88,7 +135,7 @@ public class AtividadeServiceImpl implements AtividadeService {
         if(atividadeRepository.findById(atividade.getId()).isPresent()){
             return estrategiaAtividade.create(atividade);
         }else {
-            throw new ElementoNaoEncontradoException("Esse treino informado não foi encontrado no sistema");
+            throw new ElementoNaoEncontradoException("Essa atividade informada não foi encontrado no sistema");
         }
     }
 
@@ -100,7 +147,7 @@ public class AtividadeServiceImpl implements AtividadeService {
         if(nivelRepository.findById(nivel.getId()).isPresent()){
             return nivelRepository.save(nivel);
         }else {
-            throw new ElementoNaoEncontradoException("Esse treino informado não foi encontrado no sistema");
+            throw new ElementoNaoEncontradoException("Essa atividade informada não foi encontrada no sistema");
         }
     }
 
@@ -109,7 +156,9 @@ public class AtividadeServiceImpl implements AtividadeService {
         if(nivelRepository.findById(nivelId).isEmpty()) {
             throw new ElementoNaoEncontradoException("Esse nivel informado não foi encontrado no sistema");
         }else if(!atividadeRepository.findByNivelId(nivelId).isEmpty()){
-            throw new ElementoExisteException("Exitem treinos cadastrados para esse nivel, se quiser deletar esse nivel, exclui os treino vinculados a ele.");
+            throw new ElementoExisteException("Existem atividades cadastradas para esse nivel, se quiser deletar esse" +
+                    " " +
+                    "nivel, exclua as atividades vinculadas a ele.");
         }else {
             nivelRepository.deleteById(nivelId);
         }
