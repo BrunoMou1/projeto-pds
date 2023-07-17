@@ -1,11 +1,10 @@
 package com.fitTracker.fitTracker.Controllers;
 
-import com.fitTracker.fitTracker.Models.Checkin;
+import com.fitTracker.fitTracker.Models.Frequencia;
 import com.fitTracker.fitTracker.Service.FrequenciaService;
 import com.fitTracker.fitTracker.Service.RecompensaService;
-import com.fitTracker.fitTracker.Service.impl.FrequenciaServiceImpl;
-import com.fitTracker.fitTracker.Strategy.concrets.EstrategiaCheckin;
-import com.fitTracker.fitTracker.Strategy.concrets.EstrategiaRecompensaAcademia;
+import com.fitTracker.fitTracker.Strategy.concrets.EstrategiaFreq;
+import com.fitTracker.fitTracker.Strategy.concrets.EstrategiaRecompensaEscola;
 import com.fitTracker.fitTracker.Util.CheckinJaExisteException;
 import com.fitTracker.fitTracker.Util.ElementoNaoEncontradoException;
 import com.fitTracker.fitTracker.Util.RepositoryNullException;
@@ -18,22 +17,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/checkin")
-public class CheckinController {
+@RequestMapping("/frequencia")
+public class FrequenciaController {
 
     @Autowired
-    private FrequenciaService checkInService;
+    private FrequenciaService frequenciaService;
 
     @Autowired
     private RecompensaService recompensaService;
 
     @PostMapping(value = "/{id}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity createCheckin(@PathVariable("id") Long id, @RequestBody Checkin checkin){
+    public ResponseEntity createFrequencia(@PathVariable("id") Long id, @RequestBody Frequencia frequencia){
         try {
 
-            Checkin resposta = (Checkin) checkInService.save(checkin, id, new EstrategiaCheckin());
+            Frequencia resposta = frequenciaService.save(frequencia, id, new EstrategiaFreq());
 
-            recompensaService.gerarPontuacao(id, new EstrategiaRecompensaAcademia());
+            recompensaService.gerarPontuacao(id, new EstrategiaRecompensaEscola());
 
             return new ResponseEntity(resposta, HttpStatus.CREATED);
         } catch (CheckinJaExisteException | ElementoNaoEncontradoException | RepositoryNullException ex ) {
@@ -42,10 +41,10 @@ public class CheckinController {
     }
 
     @GetMapping(value = "/{id}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity listCheckinsByUsuario(@PathVariable("id") Long id){
+    public ResponseEntity listFreqByUsuario(@PathVariable("id") Long id){
         try {
-            List<Checkin> listCheckin = new ArrayList(checkInService.findFrequenciaByUsuarioId(id));
-            return ResponseEntity.ok(listCheckin);
+            List<Frequencia> listFreq = new ArrayList(frequenciaService.findFrequenciaByUsuarioId(id));
+            return ResponseEntity.ok(listFreq);
         } catch(ElementoNaoEncontradoException | RepositoryNullException ex){
             return ResponseEntity.badRequest().body(ex.getMessage());
         }

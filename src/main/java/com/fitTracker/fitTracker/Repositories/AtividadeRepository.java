@@ -7,5 +7,4 @@ import java.util.List;
 
 public interface AtividadeRepository extends GenericRepository<Atividade, Long> {
 
-    public List<Atividade> findByNivelId(Long nivelId);
 }

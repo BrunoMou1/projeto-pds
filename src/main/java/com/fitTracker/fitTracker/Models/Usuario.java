@@ -6,15 +6,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import org.hibernate.mapping.Join;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -46,9 +43,10 @@ public class Usuario {
     @Column
     private double multiplicador;
 
+
     @ManyToMany
-    @JoinTable(name = "usuario_treino", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name="treino_id"))
-    private List<Treino> treinos = new ArrayList<>();
+    @JoinTable(name = "usuario_avaliacao", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name="avaliacao_id"))
+    private List<Avaliacao> avaliacoes = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -68,7 +66,7 @@ public class Usuario {
         this.multiplicador = multiplicador;
     }
 
-    public Usuario(String username, String password, Set<Role> roles, Set<Checkin> checkins, int pontos,
+    public Usuario(String username, String password, Set<Role> roles, int pontos,
                    double multiplicador) {
         this.username = username;
         this.password = password;
@@ -117,12 +115,12 @@ public class Usuario {
         this.pessoa = pessoa;
     }
 
-    public List<Treino> getTreinos() {
-        return treinos;
+    public List<Avaliacao> getAvaliacoes() {
+        return avaliacoes;
     }
 
-    public void setTreinos(List<Treino> treinos) {
-        this.treinos = treinos;
+    public void setAvaliacoes(List<Avaliacao> avaliacoes) {
+        this.avaliacoes = avaliacoes;
     }
 
     public void setHistoricoRecompensas(List<Recompensa> historicoRecompensas) {

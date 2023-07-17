@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
-public class Treino extends Atividade{
+public class Avaliacao extends Atividade{
 
     @NotBlank
     @Column
@@ -13,11 +13,11 @@ public class Treino extends Atividade{
     @Column
     private int pontuacao;
 
-    public Treino () {
+    public Avaliacao() {
     }
 
-    public Treino (String nome, String descricao, int pontuacao, Nivel nivel) {
-        super(nome,descricao,nivel);
+    public Avaliacao(String nome, String descricao, int pontuacao) {
+        super(nome,descricao);
         this.pontuacao = pontuacao;
     }
 

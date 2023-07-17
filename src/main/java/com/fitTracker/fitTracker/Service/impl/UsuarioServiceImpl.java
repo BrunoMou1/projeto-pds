@@ -1,6 +1,6 @@
 package com.fitTracker.fitTracker.Service.impl;
 
-import com.fitTracker.fitTracker.Models.Treino;
+import com.fitTracker.fitTracker.Models.Avaliacao;
 import com.fitTracker.fitTracker.Models.Usuario;
 import com.fitTracker.fitTracker.Repositories.AtividadeRepository;
 import com.fitTracker.fitTracker.Repositories.UsuarioRepository;
@@ -48,49 +48,27 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public List<Treino> addTreinoUsuario(Long usuarioId, Long treinoId) {
+    public List<Avaliacao> addAvaliacaoUsuario(Long usuarioId, Long treinoId) {
 
         Usuario usuario = usuarioRepository.findById(usuarioId).get();
 
         if(usuario != null){
 
-            Treino treino = (Treino) atividadeRepository.findById(treinoId).get();
+            Avaliacao avaliacao = (Avaliacao) atividadeRepository.findById(treinoId).get();
 
-            if(treino != null){
+            if(avaliacao != null){
 
-                if(!usuario.getTreinos().contains(treino)) {
-                    usuario.getTreinos().add(treino);
-                    return usuarioRepository.save(usuario).getTreinos();
+                if(!usuario.getAvaliacoes().contains(avaliacao)) {
+                    usuario.getAvaliacoes().add(avaliacao);
+                    return usuarioRepository.save(usuario).getAvaliacoes();
                 }else {
-                    throw new ElementoExisteException("Esse treino já foi cadastrado para esse usuario");
+                    throw new ElementoExisteException("Essa avaliação já foi cadastrado para esse usuario");
                 }
             }else {
-                throw new ElementoNaoEncontradoException("Esse treino informado não foi encotnrado no sistema.");
+                throw new ElementoNaoEncontradoException("Essa avaliação informado não foi encotnrado no sistema.");
             }
         }else {
             throw new ElementoNaoEncontradoException("Esse usuario informado não foi encontrado no sistema.");
         }
     }
-
-    @Override
-    public List<Treino> removeTreinoUsuario(Long usuarioId, Long treinoId) {
-        Usuario usuario = usuarioRepository.findById(usuarioId).get();
-
-        if(usuario != null){
-
-            Treino treino = (Treino) atividadeRepository.findById(treinoId).get();
-
-            if(treino != null){
-
-                usuario.getTreinos().remove(treino);
-                return usuarioRepository.save(usuario).getTreinos();
-            }else {
-                throw new ElementoNaoEncontradoException("Esse treino informado não foi encontrado no sistema.");
-            }
-        }else {
-            throw new ElementoNaoEncontradoException("Esse usuario informado não foi encontrado no sistema.");
-        }
-    }
-
-
 }

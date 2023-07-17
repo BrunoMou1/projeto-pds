@@ -84,16 +84,8 @@ public class RecompensaServiceImpl implements RecompensaService {
         if(usuario.getPontos() < recompensa.getValor()){
             throw new PontosInsuficienteException("Você não tem pontos suficientes para resgatar a recompensa");
         }
-        if(recompensa.getQuantidade() > 0){
-            List<Recompensa> listRecompensas = usuario.getHistoricoRecompensas();
-            listRecompensas.add(recompensa);
-            usuario.setHistoricoRecompensas(listRecompensas);
-            usuario.setPontos(usuario.getPontos() - recompensa.getValor());
-            usuarioRepository.save(usuario);
-            recompensa.setQuantidade(recompensa.getQuantidade() - 1);
-            recompensaRepository.save(recompensa);
-        } else {
-            throw new RecompensaEsgotadaException("Esta recompensa esgotou");
-        }
+
+        recompensaRepository.save(recompensa);
+
     }
 }

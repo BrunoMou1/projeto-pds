@@ -1,6 +1,5 @@
 package com.fitTracker.fitTracker.Service.impl;
 
-import com.fitTracker.fitTracker.Models.Checkin;
 import com.fitTracker.fitTracker.Models.Frequencia;
 import com.fitTracker.fitTracker.Models.Usuario;
 import com.fitTracker.fitTracker.Repositories.FrequenciaRepository;
@@ -28,7 +27,6 @@ public class FrequenciaServiceImpl implements FrequenciaService {
     public Frequencia save(Frequencia frequencia, Long id, EstrategiaFrequencia estrategia) {
         estrategia.addGenericRepository(frequenciaRepository);
 
-        LocalDate currentDate = LocalDate.now();
         Optional<Usuario> userOP = usuarioRepository.findById(id);
         if(userOP.isEmpty()){
             throw new ElementoNaoEncontradoException("O usuário informado não existe");
@@ -37,9 +35,9 @@ public class FrequenciaServiceImpl implements FrequenciaService {
 
         frequencia.setUsuario(user);
 
-        Checkin checkin = (Checkin) estrategia.gerarFrequencia(frequencia);
+        Frequencia freq = estrategia.gerarFrequencia(frequencia);
 
-        return frequenciaRepository.save(checkin);
+        return frequenciaRepository.save(freq);
     }
 
     @Override

@@ -3,6 +3,9 @@ package com.fitTracker.fitTracker.Models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity(name = "atividade")
 public class Atividade {
 
@@ -16,19 +19,16 @@ public class Atividade {
 
     @Column
     private String descricao;
-
-    @ManyToOne
-    @JoinColumn(name = "nivel_id")
-    private Nivel nivel;
+    @ManyToMany(mappedBy = "atividades")
+    private List<Usuario> usuarios;
 
     public Atividade(){
 
     }
 
-    public Atividade(String nome, String descricao, Nivel nivel){
+    public Atividade(String nome, String descricao){
         this.nome = nome;
         this.descricao = descricao;
-        this.nivel = nivel;
     }
 
     public Long getId() {
@@ -55,13 +55,8 @@ public class Atividade {
         this.descricao = descricao;
     }
 
-    public Nivel getNivel() {
-        return nivel;
-    }
+    public List<Usuario> getUsuarios() {return usuarios;}
 
-    public void setNivel(Nivel nivel) {
-        this.nivel = nivel;
-    }
-
+    public void setUsuarios(List<Usuario> usuarios) {this.usuarios = usuarios;}
 
 }
