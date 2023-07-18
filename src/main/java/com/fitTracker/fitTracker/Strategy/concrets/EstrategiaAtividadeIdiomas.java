@@ -1,10 +1,7 @@
 package com.fitTracker.fitTracker.Strategy.concrets;
 
 import com.fitTracker.fitTracker.Models.*;
-import com.fitTracker.fitTracker.Repositories.AtividadeRepository;
-import com.fitTracker.fitTracker.Repositories.FrequenciaRepository;
-import com.fitTracker.fitTracker.Repositories.GenericRepository;
-import com.fitTracker.fitTracker.Repositories.UsuarioRepository;
+import com.fitTracker.fitTracker.Repositories.*;
 import com.fitTracker.fitTracker.Strategy.EstrategiaAtividade;
 import com.fitTracker.fitTracker.Util.RegraNegocioException;
 import com.fitTracker.fitTracker.Util.RepositoryNullException;
@@ -45,10 +42,13 @@ public class EstrategiaAtividadeIdiomas implements EstrategiaAtividade {
     public Atividade create(Atividade atividade) {
 
         AtividadeRepository atividadeIdiomasRepository = null;
+        QuestaoRepository questaoRepository = null;
 
         for(GenericRepository obj : listGenericRepository){
             if(obj instanceof AtividadeRepository){
                 atividadeIdiomasRepository = (AtividadeRepository) obj;
+            } else if(obj instanceof QuestaoRepository){
+                questaoRepository = (QuestaoRepository) obj;
             }
         }
 
@@ -57,7 +57,9 @@ public class EstrategiaAtividadeIdiomas implements EstrategiaAtividade {
         }
 
         AtividadeIdiomas atividadeIdiomas = (AtividadeIdiomas) atividade;
-
+        for(int i = 0; i < atividadeIdiomas.getQuestoes().size(); i++){
+            questaoRepository.save(atividadeIdiomas.getQuestoes().get(i));
+        }
         return atividadeIdiomasRepository.save(atividadeIdiomas);
     }
 

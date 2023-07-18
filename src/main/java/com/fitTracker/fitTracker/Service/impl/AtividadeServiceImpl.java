@@ -3,6 +3,7 @@ package com.fitTracker.fitTracker.Service.impl;
 import com.fitTracker.fitTracker.Models.*;
 import com.fitTracker.fitTracker.Repositories.NivelRepository;
 import com.fitTracker.fitTracker.Repositories.AtividadeRepository;
+import com.fitTracker.fitTracker.Repositories.QuestaoRepository;
 import com.fitTracker.fitTracker.Repositories.UsuarioRepository;
 import com.fitTracker.fitTracker.Service.AtividadeService;
 import com.fitTracker.fitTracker.Strategy.EstrategiaAtividade;
@@ -27,6 +28,9 @@ public class AtividadeServiceImpl implements AtividadeService {
     @Autowired
     UsuarioRepository usuarioRepository;
 
+    @Autowired
+    QuestaoRepository questaoRepository;
+
 
     @Override
     public Nivel createNivel(Nivel nivel) {
@@ -44,6 +48,8 @@ public class AtividadeServiceImpl implements AtividadeService {
         validarAtividade(atividadeIdiomas, estrategiaAtividade);
 
         if(nivelRepository.findById(atividade.getNivel().getId()).isPresent()) {
+            estrategiaAtividade.addGenericRepository(atividadeRepository);
+            estrategiaAtividade.addGenericRepository(questaoRepository);
             return estrategiaAtividade.create(atividadeIdiomas);
         } else {
             throw new ElementoNaoEncontradoException("O nivel informado na atividade não foi encontrado!");
@@ -53,6 +59,7 @@ public class AtividadeServiceImpl implements AtividadeService {
     @Override
     public List<Atividade> findAtividadeByNivelId(Long nivelId) {
         if(nivelRepository.findById(nivelId).isPresent()){
+
             return atividadeRepository.findByNivelId(nivelId);
         } else {
             throw new ElementoNaoEncontradoException("O nivel informado não foi encontrado!");
