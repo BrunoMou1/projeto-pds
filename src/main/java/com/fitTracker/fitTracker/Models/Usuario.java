@@ -48,7 +48,7 @@ public class Usuario {
 
     @ManyToMany
     @JoinTable(name = "usuario_atividades", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns =
-    @JoinColumn(name="treino_id"))
+    @JoinColumn(name="atividade_id"))
     private List<AtividadeIdiomas> atividades = new ArrayList<>();
 
     @ManyToMany

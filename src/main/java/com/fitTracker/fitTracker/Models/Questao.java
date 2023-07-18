@@ -11,7 +11,6 @@ import java.util.List;
 public class Questao {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "id", nullable = false)
     private Long id;
 
     @NotBlank

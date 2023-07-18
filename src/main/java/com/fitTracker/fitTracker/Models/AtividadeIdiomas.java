@@ -12,7 +12,6 @@ public class AtividadeIdiomas extends Atividade{
     @OneToMany
     private List<Questao> questoes = new ArrayList<>();
 
-    @NotBlank
     @Column
     private int pontuacao;
 

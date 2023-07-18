@@ -4,6 +4,7 @@ import com.fitTracker.fitTracker.Models.Atividade;
 import com.fitTracker.fitTracker.Models.AtividadeIdiomas;
 import com.fitTracker.fitTracker.Models.Nivel;
 import com.fitTracker.fitTracker.Strategy.EstrategiaAtividade;
+import com.fitTracker.fitTracker.Strategy.concrets.EstrategiaAtividadeIdiomas;
 
 import java.util.List;
 
@@ -17,7 +18,8 @@ public interface AtividadeService {
 
     Atividade findAtividadeByAtividadeId(Long atividadeId);
 
-    public List<String> checkIfCorrectAnswer(Atividade atividade, Long userId, List<String> responses);
+    public List<String> checkIfCorrectAnswer(Atividade atividade, Long userId, List<String> responses,
+                                             EstrategiaAtividade estrategiaAtividade);
 
     List<Nivel> findAllNivel();
 

@@ -4,7 +4,6 @@ import com.fitTracker.fitTracker.Models.*;
 import com.fitTracker.fitTracker.Service.AtividadeService;
 import com.fitTracker.fitTracker.Service.UsuarioService;
 import com.fitTracker.fitTracker.Strategy.concrets.EstrategiaAtividadeIdiomas;
-import com.fitTracker.fitTracker.Strategy.concrets.EstrategiaTreino;
 import com.fitTracker.fitTracker.Util.ElementoNaoEncontradoException;
 import com.fitTracker.fitTracker.Util.RegraNegocioException;
 import com.fitTracker.fitTracker.Util.RepositoryNullException;
@@ -13,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -26,6 +24,16 @@ public class AtividadeController {
     @Autowired
     private UsuarioService usuarioService;
 
+    @PostMapping(value="/level", produces = "application/json;charset=UTF-8")
+    public ResponseEntity createNivel(@RequestBody Nivel nivel) {
+        try {
+            Nivel nivelSalvo = atividadeService.createNivel(nivel);
+
+            return new ResponseEntity(nivelSalvo, HttpStatus.CREATED);
+        } catch (ElementoNaoEncontradoException | RegraNegocioException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+    }
     @PostMapping(produces = "application/json;charset=UTF-8")
     public ResponseEntity createAtividade(@RequestBody AtividadeIdiomas atividade){
         try{
@@ -43,9 +51,20 @@ public class AtividadeController {
         try{
             Atividade atividade = atividadeService.findAtividadeByAtividadeId(atividadeId);
             List<String> respostas;
-            respostas = atividadeService.checkIfCorrectAnswer(atividade, userId, responses);
+            respostas = atividadeService.checkIfCorrectAnswer(atividade, userId, responses,
+                    new EstrategiaAtividadeIdiomas());
             return new ResponseEntity(respostas, HttpStatus.OK);
         } catch (ElementoNaoEncontradoException exception){
+            return ResponseEntity.badRequest().body(exception.getMessage());
+        }
+    }
+
+    @GetMapping(value="/{userId}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity getAllAtividades(@PathVariable("userId") Long userId){
+        try{
+            List<AtividadeIdiomas> atividades = usuarioService.findAtividadesByUserId(userId);
+            return new ResponseEntity(atividades, HttpStatus.OK);
+        } catch(ElementoNaoEncontradoException exception){
             return ResponseEntity.badRequest().body(exception.getMessage());
         }
     }

@@ -6,14 +6,12 @@ import com.fitTracker.fitTracker.Repositories.AtividadeRepository;
 import com.fitTracker.fitTracker.Repositories.UsuarioRepository;
 import com.fitTracker.fitTracker.Service.AtividadeService;
 import com.fitTracker.fitTracker.Strategy.EstrategiaAtividade;
-import com.fitTracker.fitTracker.Strategy.concrets.EstrategiaTreino;
 import com.fitTracker.fitTracker.Util.ElementoExisteException;
 import com.fitTracker.fitTracker.Util.ElementoNaoEncontradoException;
 import com.fitTracker.fitTracker.Util.RegraNegocioException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -71,7 +69,8 @@ public class AtividadeServiceImpl implements AtividadeService {
     }
 
     @Override
-    public List<String> checkIfCorrectAnswer(Atividade atividade, Long userId, List<String> responses){
+    public List<String> checkIfCorrectAnswer(Atividade atividade, Long userId, List<String> responses,
+                                             EstrategiaAtividade estrategiaAtividade){
         AtividadeIdiomas atividadeIdiomas = (AtividadeIdiomas) atividade;
 
         Optional<Usuario> userOp = usuarioRepository.findById(userId);
@@ -81,29 +80,11 @@ public class AtividadeServiceImpl implements AtividadeService {
         }
 
         Usuario user = userOp.get();
-        List<Questao> questoes = atividadeIdiomas.getQuestoes();
-        List<String> gabarito = new ArrayList<>();
-        int qntRespostasCertas = 0;
 
-        for(int i = 0; i < questoes.size(); i++){
-            String respostaCorreta = questoes.get(i).getRespostaCorreta();
-            String userResponse = responses.get(i);
+        estrategiaAtividade.addGenericRepository(atividadeRepository);
+        estrategiaAtividade.addGenericRepository(usuarioRepository);
 
-            if(respostaCorreta.equals(userResponse)){
-                qntRespostasCertas++;
-                gabarito.add("Acertou!");
-            } else {
-                gabarito.add("Errou...");
-            }
-        }
-
-        if(qntRespostasCertas >= Math.round(questoes.size()) * 0.7){
-            List<AtividadeIdiomas> listaAtividadesFeitas = user.getAtividades();
-            listaAtividadesFeitas.add(atividadeIdiomas);
-            user.setAtividades(listaAtividadesFeitas);
-            user.setPontos(user.getPontos() + atividadeIdiomas.getPontuacao());
-            usuarioRepository.save(user);
-        }
+        List<String> gabarito = estrategiaAtividade.checkAnswer(atividadeIdiomas, user, responses);
 
         return gabarito;
     }
@@ -116,14 +97,9 @@ public class AtividadeServiceImpl implements AtividadeService {
     @Override
     public void deleteAtividade(Long atividadeId) {
         if(atividadeRepository.findById(atividadeId).isPresent()){
-
-            if(!usuarioRepository.findUsuarioByTreinosId(atividadeId).isEmpty()){
-                throw new RegraNegocioException("Esse treino não pode ser apagado, pois existe ligação com algum usuario.");
-            }
-
             atividadeRepository.deleteById(atividadeId);
         }else {
-            throw new ElementoNaoEncontradoException("Esse treino informado não foi encontrado no sistema");
+            throw new ElementoNaoEncontradoException("Essa atividade não foi encontrada no sistema");
         }
     }
 

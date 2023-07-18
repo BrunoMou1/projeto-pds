@@ -1,11 +1,10 @@
 package com.fitTracker.fitTracker.Service.impl;
 
-import com.fitTracker.fitTracker.Models.Treino;
+import com.fitTracker.fitTracker.Models.AtividadeIdiomas;
 import com.fitTracker.fitTracker.Models.Usuario;
 import com.fitTracker.fitTracker.Repositories.AtividadeRepository;
 import com.fitTracker.fitTracker.Repositories.UsuarioRepository;
 import com.fitTracker.fitTracker.Service.UsuarioService;
-import com.fitTracker.fitTracker.Util.ElementoExisteException;
 import com.fitTracker.fitTracker.Util.ElementoNaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,49 +47,12 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public List<Treino> addTreinoUsuario(Long usuarioId, Long treinoId) {
+    public List<AtividadeIdiomas> findAtividadesByUserId(Long id){
+        Optional<Usuario> user = usuarioRepository.findById(id);
 
-        Usuario usuario = usuarioRepository.findById(usuarioId).get();
-
-        if(usuario != null){
-
-            Treino treino = (Treino) atividadeRepository.findById(treinoId).get();
-
-            if(treino != null){
-
-                if(!usuario.getTreinos().contains(treino)) {
-                    usuario.getTreinos().add(treino);
-                    return usuarioRepository.save(usuario).getTreinos();
-                }else {
-                    throw new ElementoExisteException("Esse treino já foi cadastrado para esse usuario");
-                }
-            }else {
-                throw new ElementoNaoEncontradoException("Esse treino informado não foi encotnrado no sistema.");
-            }
-        }else {
-            throw new ElementoNaoEncontradoException("Esse usuario informado não foi encontrado no sistema.");
+        if(!user.isPresent()){
+            throw new ElementoNaoEncontradoException("Esse usuário não foi encontrado");
         }
+        return user.get().getAtividades();
     }
-
-    @Override
-    public List<Treino> removeTreinoUsuario(Long usuarioId, Long treinoId) {
-        Usuario usuario = usuarioRepository.findById(usuarioId).get();
-
-        if(usuario != null){
-
-            Treino treino = (Treino) atividadeRepository.findById(treinoId).get();
-
-            if(treino != null){
-
-                usuario.getTreinos().remove(treino);
-                return usuarioRepository.save(usuario).getTreinos();
-            }else {
-                throw new ElementoNaoEncontradoException("Esse treino informado não foi encontrado no sistema.");
-            }
-        }else {
-            throw new ElementoNaoEncontradoException("Esse usuario informado não foi encontrado no sistema.");
-        }
-    }
-
-
 }
